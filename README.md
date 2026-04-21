@@ -8,27 +8,27 @@
 
 This project is a **console-based information system for a research-oriented university**, developed as part of the Object-Oriented Programming course.
 
-The system simulates real university operations, including:
+The system simulates real university processes including:
 
-* academic processes (courses, grading, transcripts)
-* user management (students, teachers, administrators)
-* research activities (projects, publications)
-* internal communication and management workflows
+* user management
+* course registration and grading
+* research activities
+* internal communication and administration
+* authentication and data persistence
 
-The main goal of the project is to apply **OOP principles, design patterns, and system architecture design** in a realistic domain.
+The project demonstrates **full OOP design**, modular architecture, and usage of **design patterns**.
 
 ---
 
-## 🧱 System Design & Architecture
+## 🧱 System Architecture
 
-The system is designed using **clean OOP architecture** with:
+The system is organized into logical modules:
 
-* 🔹 Inheritance hierarchy
-* 🔹 Abstraction and encapsulation
-* 🔹 Interfaces and polymorphism
-* 🔹 Separation into logical packages
+```text
+Core → Academic → Research → Management → System Integration
+```
 
-### 🔗 Core Class Hierarchy
+### 🔗 Class Hierarchy
 
 ```text
 User (abstract)
@@ -41,135 +41,138 @@ User (abstract)
 
 ---
 
-## ⚙️ Core Functionality
+## ⚙️ Modules Description
 
-### 👤 User System
+### 👤 1. Core System
 
-* Authentication-ready structure (username/password)
-* Unified base class (`User`)
-* Role-based system using inheritance
+* Base class: `User`
+* Derived classes: `Student`, `Teacher`, `Manager`, `Admin`
+* Common properties:
+
+  * id, username, password
+  * name, gender
+* Supports:
+
+  * inheritance
+  * encapsulation
+  * polymorphism
 
 ---
 
-### 🎓 Academic System
+### 🎓 2. Academic System
 
-* Course registration
-* Credit limit control (max 21 credits)
+Implements the educational workflow:
+
+* `Course`
+* `Lesson`
+* `Mark`
+* `Transcript`
+
+#### Features:
+
+* Course registration with **credit limit (21)**
+* Multiple instructors per course
+* Lesson scheduling (lecture/practice)
 * Grading system:
 
-  * First attestation
-  * Second attestation
-  * Final exam
+  * attestation 1
+  * attestation 2
+  * final exam
 * GPA calculation
-* Transcript support
+* Transcript generation
 
 ---
 
-### 🧑‍🏫 Teaching System
+### 🔬 3. Research System
 
-* Teachers assigned to courses
-* Multiple instructors per course
-* Student evaluation and grading
+Implements research-related functionality:
 
----
+* `Researcher` (interface)
+* `ResearchPaper`
+* `ResearchProject`
 
-### 🧑‍💼 Management System
+#### Features:
 
-* Managers approve course registration
-* Assign courses to teachers
-* Generate reports (academic performance)
-* Manage system data
+* Teachers and students can act as researchers
+* Papers contain:
 
----
+  * title, authors, citations, journal, pages, DOI
+* Sorting research papers by:
 
-### 🛠 Administration System
+  * citations
+  * publication date
+  * pages
+* Top cited researcher detection
+* Supervisor validation:
 
-* Full user management (CRUD)
-* System monitoring (logs, activity tracking)
+  * must have **h-index ≥ 3**
 
----
+#### Custom Exceptions:
 
-## 🔬 Research Module (Key Feature)
-
-The system includes a **research-oriented subsystem**, which models:
-
-### 🧑‍🔬 Researcher
-
-* Can be:
-
-  * Teacher
-  * Student
-  * Any Employee
-* Supports research activity independent of role
+* `InvalidSupervisorException`
+* `NonResearcherJoinException`
 
 ---
 
-### 📄 Research Papers
+### 🧑‍💼 4. Management System
 
-* Attributes:
+Implements administrative operations:
 
-  * Title
-  * Authors
-  * Citations
-  * Journal
-  * Pages
-  * Publication date
-  * DOI
+* `Message`
+* `Request`
+* `News`
+* `AdminService`
+* `ManagerService`
+* `LogRecord`
 
----
+#### Features:
 
-### 📊 Features
+* Admin:
 
-* Print research papers using custom sorting:
+  * add/remove users
+  * view logs
+* Manager:
 
-  * By citations
-  * By publication date
-  * By length (pages)
+  * approve requests
+  * assign teachers to courses
+  * approve student registration
+  * publish news
+* Employees:
 
----
-
-### 🧪 Research Projects
-
-* Topic-based projects
-* Participants (only researchers allowed)
-* Linked publications
-
----
-
-### ❗ Validation Rules
-
-* Research supervisor must have **h-index ≥ 3**
-* Only researchers can join research projects
-* Violations throw **custom exceptions**
+  * send messages
+  * create requests
+* System logs for all actions
 
 ---
 
-## 🧩 OOP & Design Features
+### 🧠 5. Final System Integration
 
-### ✔ Object-Oriented Concepts
+Implements system-level functionality:
 
-* Inheritance
-* Encapsulation
-* Polymorphism
-* Abstraction
+#### 🔐 Authentication
 
----
+* `AuthService`
+* login by username/password
 
-### ✔ Java Features Used
+#### 💾 Data Storage
 
-* `Comparable` (sorting users)
-* `Comparator` (custom sorting logic)
-* Collections Framework (`List`, `Set`, etc.)
+* `DataStore` (Singleton)
 * Serialization / Deserialization
+* Saves system state to file (`data.ser`)
+
+#### 🏭 Factory Pattern
+
+* `UserFactory`
+* Dynamic creation of users
 
 ---
 
-### ✔ Design Patterns (Planned / Implemented)
+## 🧩 Design Patterns Used
 
-* Factory Pattern (user creation)
-* Strategy Pattern (sorting algorithms)
-* Singleton Pattern (data storage)
-* Observer Pattern (notifications)
+* **Singleton** → `DataStore`
+* **Factory** → `UserFactory`
+* **Strategy** → Comparators for sorting
+* **Comparator** → Custom sorting logic
 
 ---
 
@@ -182,7 +185,8 @@ src/
 ├── enums/
 │   ├── Gender.java
 │   ├── TeacherTitle.java
-│   └── ManagerType.java
+│   ├── ManagerType.java
+│   └── LessonType.java
 │
 ├── users/
 │   ├── User.java
@@ -196,61 +200,88 @@ src/
 │   ├── StudentGpaComparator.java
 │   └── UserNameComparator.java
 │
-├── courses/        (planned)
-├── research/       (planned)
-├── exceptions/     (planned)
-└── database/       (planned)
+├── courses/
+│   ├── Course.java
+│   ├── Lesson.java
+│   ├── Mark.java
+│   └── Transcript.java
+│
+├── exceptions/
+│   ├── InvalidSupervisorException.java
+│   └── NonResearcherJoinException.java
+│
+├── research/
+│   ├── Researcher.java
+│   ├── ResearchPaper.java
+│   ├── ResearchProject.java
+│   ├── ResearchUtils.java
+│   └── comparators/
+│       ├── PaperByCitationsComparator.java
+│       ├── PaperByDateComparator.java
+│       └── PaperByPagesComparator.java
+│
+├── management/
+│   ├── Message.java
+│   ├── Request.java
+│   ├── News.java
+│   ├── AdminService.java
+│   └── ManagerService.java
+│
+├── logs/
+│   └── LogRecord.java
+│
+├── auth/
+│   └── AuthService.java
+│
+├── database/
+│   └── DataStore.java
+│
+└── factory/
+    └── UserFactory.java
 ```
 
 ---
 
 ## 🚀 How to Run
 
-From the `src` directory:
+From `src` directory:
 
 ```bash
-javac enums/*.java users/*.java comparators/*.java Main.java
+javac enums/*.java users/*.java comparators/*.java courses/*.java exceptions/*.java research/*.java research/comparators/*.java management/*.java logs/*.java database/*.java auth/*.java factory/*.java Main.java
 java Main
 ```
 
 ---
 
-## 📊 Current Status
+## 📊 Key Features Summary
 
-| Module          | Status         |
-| --------------- | -------------- |
-| Core System     | ✅ Completed    |
-| Academic        | 🔄 In Progress |
-| Research        | 🔄 In Progress |
-| Management      | 🔄 In Progress |
-| Design Patterns | 🔄 Planned     |
-
----
-
-## 🎯 Key Highlights
-
-* Clean and scalable architecture
-* Strong use of OOP principles
+* Full OOP architecture
 * Modular system design
-* Real-world university simulation
-* Research-oriented functionality
+* Academic workflow simulation
+* Research management system
+* Administrative tools
+* Authentication system
+* Persistent storage (file-based)
+* Multiple design patterns
+* Custom exceptions and validation
 
 ---
 
 ## 📌 Notes
 
-This project is developed strictly according to **OOP course requirements**, focusing on:
+This project was developed strictly according to OOP course requirements, focusing on:
 
-* system design
-* code quality
-* maintainability
-* extensibility
+* clean architecture
+* scalability
+* readability
+* real-world simulation
 
 ---
 
-## 🧠 Future Improvements
+## 🔮 Future Improvements
 
-* Full authentication system
-* GUI (optional extension)
-* Database integration
-* Advanced analytics & reporting
+* GUI (JavaFX / Web)
+* Database integration (PostgreSQL / MySQL)
+* REST API
+* Role-based access control
+* Advanced analytics and reports
