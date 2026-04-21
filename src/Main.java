@@ -1,11 +1,15 @@
 import comparators.*;
 import courses.*;
 import enums.*;
-import research.ResearchPaper;
-import research.ResearchProject;
-
 import java.util.ArrayList;
 import java.util.List;
+import management.AdminService;
+import management.ManagerService;
+import management.Message;
+import management.News;
+import management.Request;
+import research.ResearchPaper;
+import research.ResearchProject;
 import users.*;
 
 public class Main {
@@ -124,6 +128,65 @@ public class Main {
         } catch (exceptions.InvalidSupervisorException e) {
             System.out.println("Supervisor error: " + e.getMessage());
         }
+
+        System.out.println();
+        System.out.println("===== MANAGEMENT SYSTEM =====");
+
+        Admin admin = new Admin("A1", "admin1", "123",
+                "Alina", "Sarsen", Gender.FEMALE,
+                400000, "Administration");
+
+        Manager manager = new Manager("M1", "manager1", "123",
+                "Aruzhan", "Bektur", Gender.FEMALE,
+                450000, "Registrar Office", ManagerType.OR);
+
+        Teacher teacher2 = new Teacher("T2", "teacher2", "123",
+                "Miras", "Ospanov", Gender.MALE,
+                480000, "FIT", TeacherTitle.LECTURER);
+
+        AdminService adminService = new AdminService();
+        adminService.addUser(s1);
+        adminService.addUser(s2);
+        adminService.addUser(t);
+        adminService.addUser(manager);
+        adminService.addUser(admin);
+
+        ManagerService managerService = new ManagerService(manager);
+
+        Request request = new Request(t, "Please approve academic mobility request");
+        managerService.submitRequest(request);
+        managerService.approveRequest(request);
+
+        News news = new News("Midterm Week", "Midterm exams will start next Monday.");
+        managerService.publishNews(news);
+
+        Message message = new Message(manager, teacher2, "Please upload course materials today.");
+        managerService.sendMessage(message);
+
+        Course dbCourse = new Course("Databases", 4);
+        managerService.assignTeacherToCourse(teacher2, dbCourse);
+        managerService.approveStudentRegistration(s2, dbCourse);
+
+        System.out.println();
+        adminService.printUsers();
+
+        System.out.println();
+        adminService.printLogs();
+
+        System.out.println();
+        managerService.printRequests();
+
+        System.out.println();
+        managerService.printNews();
+
+        System.out.println();
+        managerService.printMessages();
+
+        System.out.println();
+        managerService.printLogs();
+
+
+
 
     }
 }
