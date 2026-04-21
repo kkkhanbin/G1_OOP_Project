@@ -1,6 +1,9 @@
 import comparators.*;
 import courses.*;
 import enums.*;
+import research.ResearchPaper;
+import research.ResearchProject;
+
 import java.util.ArrayList;
 import java.util.List;
 import users.*;
@@ -60,5 +63,67 @@ public class Main {
 
         System.out.println();
         transcript.printTranscript();
+
+        ResearchPaper p1 = new ResearchPaper(
+            "AI in Education",
+            java.util.List.of("Dias Tanirbergen", "Aliya Serik"),
+            25,
+            "IEEE Access",
+            12,
+            java.time.LocalDate.of(2024, 5, 10),
+            "10.1000/182"
+        );
+
+        ResearchPaper p2 = new ResearchPaper(
+            "Machine Learning for Students",
+            java.util.List.of("Nurzhan Kalmurat"),
+            40,
+            "Springer Journal",
+            18,
+            java.time.LocalDate.of(2025, 1, 15),
+            "10.1000/183"
+        );
+
+        t.addResearchPaper(p1);
+        s2.addResearchPaper(p2);
+
+        t.setHIndex(5);
+        s2.setHIndex(2);
+
+        ResearchProject project = new ResearchProject("Smart University");
+
+        try {
+            project.joinProject(t);
+            project.joinProject(s2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println();
+        System.out.println("Teacher papers sorted by citations:");
+        t.printPapers(new research.comparators.PaperByCitationsComparator());
+
+        System.out.println();
+        System.out.println("Student papers sorted by date:");
+        s2.printPapers(new research.comparators.PaperByDateComparator());
+
+        java.util.List<research.Researcher> researchers = new java.util.ArrayList<>();
+        researchers.add(t);
+        researchers.add(s2);
+
+        System.out.println();
+        System.out.println("All university papers sorted by pages:");
+        research.ResearchUtils.printAllPapers(researchers, new research.comparators.PaperByPagesComparator());
+
+        System.out.println();
+        research.Researcher topResearcher = research.ResearchUtils.getTopCitedResearcher(researchers);
+        System.out.println("Top cited researcher: " + topResearcher.getResearcherName());
+
+        try {
+            research.ResearchUtils.assignSupervisor(s2);
+        } catch (exceptions.InvalidSupervisorException e) {
+            System.out.println("Supervisor error: " + e.getMessage());
+        }
+
     }
 }

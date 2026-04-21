@@ -2,12 +2,16 @@ package users;
 
 import enums.Gender;
 
-public class Student extends User {
+public class Student extends User implements research.Researcher{
     private String major;
     private int yearOfStudy;
     private double gpa;
     private int credits;
-
+    
+    private int hIndex;
+    private java.util.List<research.ResearchPaper> researchPapers = new java.util.ArrayList<>();
+    private java.util.List<research.ResearchProject> researchProjects = new java.util.ArrayList<>();
+    
     public Student() {}
 
     public Student(String id, String username, String password,
@@ -56,5 +60,47 @@ public class Student extends User {
                 ", credits=" + credits +
                 '}';
     }
-    
+    @Override
+    public int getHIndex() {
+        return hIndex;
+    }
+
+    @Override
+    public void setHIndex(int hIndex) {
+        this.hIndex = hIndex;
+    }
+
+    @Override
+    public java.util.List<research.ResearchPaper> getResearchPapers() {
+        return researchPapers;
+    }
+
+    @Override
+    public java.util.List<research.ResearchProject> getResearchProjects() {
+        return researchProjects;
+    }
+
+    @Override
+    public void addResearchPaper(research.ResearchPaper paper) {
+        researchPapers.add(paper);
+    }
+
+    @Override
+    public void addResearchProject(research.ResearchProject project) {
+        researchProjects.add(project);
+    }
+
+    @Override
+    public void printPapers(java.util.Comparator<research.ResearchPaper> comparator) {
+        researchPapers.sort(comparator);
+        for (research.ResearchPaper paper : researchPapers) {
+            System.out.println(paper);
+        }
+    }
+
+    @Override
+    public String getResearcherName() {
+        return getFullName();
+    }
+
 }
