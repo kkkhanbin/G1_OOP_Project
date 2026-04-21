@@ -1,12 +1,11 @@
 package courses;
 
-import users.Student;
-import users.Teacher;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import users.Student;
+import users.Teacher;
 
 public class Course {
     private String name;
@@ -51,6 +50,11 @@ public class Course {
     }
 
     public boolean registerStudent(Student student) {
+        if (!student.canTakeMoreCourses()) {
+            System.out.println("Cannot register: student has failed more than 3 times");
+            return false;
+        }
+
         if (!student.canRegister(credits)) {
             System.out.println("Cannot register: credit limit exceeded");
             return false;
@@ -78,7 +82,12 @@ public class Course {
             System.out.println("Student is not registered to this course");
             return;
         }
+
         studentMarks.put(student, mark);
+
+        if (!mark.isPassed()) {
+            student.incrementFailedCourses();
+        }
     }
 
     public Mark getMark(Student student) {

@@ -9,6 +9,13 @@ public class NewsSubscriber implements Observer {
 
     @Override
     public void update(News news) {
-        System.out.println(name + " received news: " + news.getTitle());
+        System.out.println(name + " received news notification: " + news.getTitle());
+    }
+
+    @Override
+    public String toString() {
+        return "NewsSubscriber{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

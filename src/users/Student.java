@@ -7,6 +7,7 @@ public class Student extends User implements research.Researcher {
     private int yearOfStudy;
     private double gpa;
     private int credits;
+    private int failedCoursesCount;
 
     private int hIndex;
     private java.util.List<research.ResearchPaper> researchPapers = new java.util.ArrayList<>();
@@ -24,6 +25,7 @@ public class Student extends User implements research.Researcher {
         this.yearOfStudy = yearOfStudy;
         this.gpa = gpa;
         this.credits = credits;
+        this.failedCoursesCount = 0;
     }
 
     public String getMajor() {
@@ -42,8 +44,20 @@ public class Student extends User implements research.Researcher {
         return credits;
     }
 
+    public int getFailedCoursesCount() {
+        return failedCoursesCount;
+    }
+
     public boolean canRegister(int newCredits) {
         return credits + newCredits <= 21;
+    }
+
+    public boolean canTakeMoreCourses() {
+        return failedCoursesCount < 3;
+    }
+
+    public void incrementFailedCourses() {
+        failedCoursesCount++;
     }
 
     public research.Researcher getResearchSupervisor() {
@@ -117,6 +131,7 @@ public class Student extends User implements research.Researcher {
                 ", yearOfStudy=" + yearOfStudy +
                 ", gpa=" + gpa +
                 ", credits=" + credits +
+                ", failedCoursesCount=" + failedCoursesCount +
                 ", researchSupervisor=" +
                 (researchSupervisor == null ? "none" : researchSupervisor.getResearcherName()) +
                 '}';

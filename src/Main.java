@@ -89,9 +89,9 @@ public class Main {
 
         Course oopCourse = new Course("OOP", 5);
 
-        oopCourse.registerStudent(s1); // should fail: 18 + 5 > 21
-        oopCourse.registerStudent(s2); // should pass
-        oopCourse.registerStudent(s4); // should pass
+        oopCourse.registerStudent(s1);
+        oopCourse.registerStudent(s2);
+        oopCourse.registerStudent(s4);
 
         oopCourse.addInstructor(t1);
 
@@ -223,7 +223,37 @@ public class Main {
         System.out.println(s4);
 
         // =========================
-        // 5. MANAGEMENT SYSTEM
+        // 5. FAIL LIMIT TEST
+        // =========================
+        System.out.println();
+        System.out.println("===== FAIL LIMIT TEST =====");
+
+        Student failedStudent = new Student(
+                "S5", "failtest", "123",
+                "Fail", "Student", Gender.MALE,
+                "CS", 3, 2.0, 6
+        );
+
+        Course calc1 = new Course("Calculus 1", 3);
+        Course calc2 = new Course("Calculus 2", 3);
+        Course physics = new Course("Physics", 3);
+        Course algorithms = new Course("Algorithms", 3);
+
+        calc1.registerStudent(failedStudent);
+        calc2.registerStudent(failedStudent);
+        physics.registerStudent(failedStudent);
+
+        calc1.putMark(failedStudent, new Mark(10, 10, 20)); // fail
+        calc2.putMark(failedStudent, new Mark(10, 10, 15)); // fail
+        physics.putMark(failedStudent, new Mark(15, 10, 20)); // fail
+
+        System.out.println("Failed courses count: " + failedStudent.getFailedCoursesCount());
+
+        boolean canRegisterAgain = algorithms.registerStudent(failedStudent);
+        System.out.println("Can register after 3 fails: " + canRegisterAgain);
+
+        // =========================
+        // 6. MANAGEMENT SYSTEM
         // =========================
         System.out.println();
         System.out.println("===== MANAGEMENT SYSTEM =====");
@@ -244,6 +274,15 @@ public class Main {
         managerService.approveRequest(request);
 
         News news = new News("Midterm Week", "Midterm exams will start next Monday.");
+
+        NewsSubscriber sub1 = new NewsSubscriber("Student Portal");
+        NewsSubscriber sub2 = new NewsSubscriber("Teacher Portal");
+        NewsSubscriber sub3 = new NewsSubscriber("Mobile App");
+
+        news.attach(sub1);
+        news.attach(sub2);
+        news.attach(sub3);
+
         managerService.publishNews(news);
 
         Message message = new Message(manager, t2, "Please upload course materials today.");
@@ -271,7 +310,7 @@ public class Main {
         managerService.printLogs();
 
         // =========================
-        // 6. FINAL SYSTEM (AUTH + STORAGE + FACTORY)
+        // 7. FINAL SYSTEM (AUTH + STORAGE + FACTORY)
         // =========================
         System.out.println();
         System.out.println("===== FINAL SYSTEM (AUTH + STORAGE + FACTORY) =====");

@@ -1,13 +1,12 @@
 package management;
 
 import courses.Course;
+import java.util.ArrayList;
+import java.util.List;
 import logs.LogRecord;
 import users.Manager;
 import users.Student;
 import users.Teacher;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ManagerService {
     private Manager manager;
@@ -36,6 +35,7 @@ public class ManagerService {
 
     public void publishNews(News news) {
         newsList.add(news);
+        news.notifyObservers();
         logs.add(new LogRecord("News published: " + news.getTitle()));
     }
 

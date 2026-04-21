@@ -1,21 +1,20 @@
 package management;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class News {
-    private List<Observer> observers = new ArrayList<>();
     private String title;
     private String content;
     private LocalDateTime publishedAt;
+    private List<Observer> observers;
 
-    
     public News(String title, String content) {
         this.title = title;
         this.content = content;
         this.publishedAt = LocalDateTime.now();
+        this.observers = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -32,6 +31,10 @@ public class News {
 
     public void attach(Observer observer) {
         observers.add(observer);
+    }
+
+    public void detach(Observer observer) {
+        observers.remove(observer);
     }
 
     public void notifyObservers() {
