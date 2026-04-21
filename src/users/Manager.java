@@ -2,6 +2,7 @@ package users;
 
 import enums.Gender;
 import enums.ManagerType;
+import enums.SchoolType;
 
 public class Manager extends Employee {
     private ManagerType managerType;
@@ -10,8 +11,8 @@ public class Manager extends Employee {
 
     public Manager(String id, String username, String password,
                    String firstName, String lastName, Gender gender,
-                   double salary, String department, ManagerType managerType) {
-        super(id, username, password, firstName, lastName, gender, salary, department);
+                   double salary, String department, SchoolType school, ManagerType managerType) {
+        super(id, username, password, firstName, lastName, gender, salary, department, school);
         this.managerType = managerType;
     }
 
@@ -26,8 +27,10 @@ public class Manager extends Employee {
     @Override
     public String toString() {
         return "Manager{" +
-                "name='" + getFullName() + '\'' +
+                "id='" + getId() + '\'' +
+                ", name='" + getFullName() + '\'' +
                 ", department='" + getDepartment() + '\'' +
+                ", school=" + getSchool() +
                 ", managerType=" + managerType +
                 '}';
     }

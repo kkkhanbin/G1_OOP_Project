@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import management.*;
+import reports.ReportGenerator;
 import research.ResearchPaper;
 import research.ResearchProject;
 import research.ResearchUtils;
@@ -36,28 +37,34 @@ public class Main {
                 "IS", 1, 3.9, 15
         );
 
+        Student s4 = new Student(
+                "S4", "aidana", "123",
+                "Aidana", "Nurlybek", Gender.FEMALE,
+                "CS", 4, 3.7, 12
+        );
+
         Teacher t1 = new Teacher(
                 "T1", "dias", "123",
                 "Dias", "Tanirbergen", Gender.MALE,
-                500000, "FIT", TeacherTitle.PROFESSOR
+                500000, "FIT", SchoolType.FIT, TeacherTitle.PROFESSOR
         );
 
         Teacher t2 = new Teacher(
                 "T2", "miras", "123",
                 "Miras", "Ospanov", Gender.MALE,
-                480000, "FIT", TeacherTitle.LECTURER
+                480000, "FIT", SchoolType.FIT, TeacherTitle.LECTURER
         );
 
         Manager manager = new Manager(
                 "M1", "manager1", "123",
                 "Aruzhan", "Bektur", Gender.FEMALE,
-                450000, "Registrar Office", ManagerType.OR
+                450000, "Registrar Office", SchoolType.FIT, ManagerType.OR
         );
 
         Admin admin = new Admin(
                 "A1", "admin1", "123",
                 "Alina", "Sarsen", Gender.FEMALE,
-                400000, "Administration"
+                400000, "Administration", SchoolType.FIT
         );
 
         System.out.println("===== CORE SYSTEM =====");
@@ -65,6 +72,7 @@ public class Main {
         List<Student> students = new ArrayList<>();
         students.add(s1);
         students.add(s2);
+        students.add(s4);
 
         students.sort(new StudentGpaComparator());
 
@@ -81,8 +89,9 @@ public class Main {
 
         Course oopCourse = new Course("OOP", 5);
 
-        oopCourse.registerStudent(s1); // should fail because 18 + 5 > 21
+        oopCourse.registerStudent(s1); // should fail: 18 + 5 > 21
         oopCourse.registerStudent(s2); // should pass
+        oopCourse.registerStudent(s4); // should pass
 
         oopCourse.addInstructor(t1);
 
@@ -90,7 +99,10 @@ public class Main {
         oopCourse.addLesson(new Lesson(LessonType.PRACTICE, "Classes and Objects", 2));
 
         Mark markS2 = new Mark(25, 25, 45);
+        Mark markS4 = new Mark(22, 23, 40);
+
         oopCourse.putMark(s2, markS2);
+        oopCourse.putMark(s4, markS4);
 
         System.out.println(oopCourse);
         System.out.println();
@@ -107,6 +119,9 @@ public class Main {
         Transcript transcript = new Transcript();
         transcript.addCourseMark(oopCourse, markS2);
         transcript.printTranscript();
+
+        System.out.println();
+        ReportGenerator.generateCourseReport(oopCourse);
 
         // =========================
         // 3. RESEARCH SYSTEM
@@ -168,6 +183,16 @@ public class Main {
         Researcher topResearcher = ResearchUtils.getTopCitedResearcher(researchers);
         System.out.println("Top cited researcher: " + topResearcher.getResearcherName());
 
+        Researcher topBySchool = ResearchUtils.getTopCitedResearcherBySchool(researchers, SchoolType.FIT);
+        if (topBySchool != null) {
+            System.out.println("Top cited researcher in FIT: " + topBySchool.getResearcherName());
+        }
+
+        Researcher topByYear = ResearchUtils.getTopCitedResearcherByYear(researchers, 2025);
+        if (topByYear != null) {
+            System.out.println("Top cited researcher in 2025: " + topByYear.getResearcherName());
+        }
+
         try {
             ResearchUtils.assignSupervisor(s2);
         } catch (InvalidSupervisorException e) {
@@ -175,7 +200,30 @@ public class Main {
         }
 
         // =========================
-        // 4. MANAGEMENT SYSTEM
+        // 4. 4TH YEAR SUPERVISOR TEST
+        // =========================
+        System.out.println();
+        System.out.println("===== 4TH YEAR SUPERVISOR TEST =====");
+
+        try {
+            s4.assignResearchSupervisor(t1);
+            System.out.println("Supervisor assigned successfully: " +
+                    s4.getResearchSupervisor().getResearcherName());
+        } catch (InvalidSupervisorException e) {
+            System.out.println("Supervisor error: " + e.getMessage());
+        }
+
+        try {
+            s4.assignResearchSupervisor(s2);
+        } catch (InvalidSupervisorException e) {
+            System.out.println("Supervisor error: " + e.getMessage());
+        }
+
+        System.out.println("4th year student info:");
+        System.out.println(s4);
+
+        // =========================
+        // 5. MANAGEMENT SYSTEM
         // =========================
         System.out.println();
         System.out.println("===== MANAGEMENT SYSTEM =====");
@@ -183,6 +231,7 @@ public class Main {
         AdminService adminService = new AdminService();
         adminService.addUser(s1);
         adminService.addUser(s2);
+        adminService.addUser(s4);
         adminService.addUser(t1);
         adminService.addUser(t2);
         adminService.addUser(manager);
@@ -222,7 +271,7 @@ public class Main {
         managerService.printLogs();
 
         // =========================
-        // 5. FINAL INTEGRATION
+        // 6. FINAL SYSTEM (AUTH + STORAGE + FACTORY)
         // =========================
         System.out.println();
         System.out.println("===== FINAL SYSTEM (AUTH + STORAGE + FACTORY) =====");
@@ -230,6 +279,7 @@ public class Main {
         DataStore dataStore = DataStore.getInstance();
         dataStore.addUser(s1);
         dataStore.addUser(s2);
+        dataStore.addUser(s4);
         dataStore.addUser(t1);
         dataStore.addUser(manager);
         dataStore.addUser(admin);

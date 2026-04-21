@@ -2,16 +2,18 @@ package users;
 
 import enums.Gender;
 
-public class Student extends User implements research.Researcher{
+public class Student extends User implements research.Researcher {
     private String major;
     private int yearOfStudy;
     private double gpa;
     private int credits;
-    
+
     private int hIndex;
     private java.util.List<research.ResearchPaper> researchPapers = new java.util.ArrayList<>();
     private java.util.List<research.ResearchProject> researchProjects = new java.util.ArrayList<>();
-    
+
+    private research.Researcher researchSupervisor;
+
     public Student() {}
 
     public Student(String id, String username, String password,
@@ -23,12 +25,6 @@ public class Student extends User implements research.Researcher{
         this.gpa = gpa;
         this.credits = credits;
     }
-
-    public boolean canRegister(int newCredits) {
-        return credits + newCredits <= 21;
-    }
-
-    //getters
 
     public String getMajor() {
         return major;
@@ -46,20 +42,29 @@ public class Student extends User implements research.Researcher{
         return credits;
     }
 
-
-
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id='" + getId() + '\'' +
-                ", name='" + getFullName() + '\'' +
-                ", major='" + major + '\'' +
-                ", yearOfStudy=" + yearOfStudy +
-                ", gpa=" + gpa +
-                ", credits=" + credits +
-                '}';
+    public boolean canRegister(int newCredits) {
+        return credits + newCredits <= 21;
     }
+
+    public research.Researcher getResearchSupervisor() {
+        return researchSupervisor;
+    }
+
+    public void assignResearchSupervisor(research.Researcher supervisor)
+            throws exceptions.InvalidSupervisorException {
+
+        if (yearOfStudy != 4) {
+            System.out.println("Research supervisor is required only for 4th year students.");
+            return;
+        }
+
+        if (supervisor.getHIndex() < 3) {
+            throw new exceptions.InvalidSupervisorException("Supervisor must have h-index >= 3");
+        }
+
+        this.researchSupervisor = supervisor;
+    }
+
     @Override
     public int getHIndex() {
         return hIndex;
@@ -103,4 +108,17 @@ public class Student extends User implements research.Researcher{
         return getFullName();
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id='" + getId() + '\'' +
+                ", name='" + getFullName() + '\'' +
+                ", major='" + major + '\'' +
+                ", yearOfStudy=" + yearOfStudy +
+                ", gpa=" + gpa +
+                ", credits=" + credits +
+                ", researchSupervisor=" +
+                (researchSupervisor == null ? "none" : researchSupervisor.getResearcherName()) +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package users;
 
 import enums.Gender;
+import enums.SchoolType;
 import enums.TeacherTitle;
 
 public class Teacher extends Employee implements research.Researcher {
@@ -14,8 +15,8 @@ public class Teacher extends Employee implements research.Researcher {
 
     public Teacher(String id, String username, String password,
                    String firstName, String lastName, Gender gender,
-                   double salary, String department, TeacherTitle title) {
-        super(id, username, password, firstName, lastName, gender, salary, department);
+                   double salary, String department, SchoolType school, TeacherTitle title) {
+        super(id, username, password, firstName, lastName, gender, salary, department, school);
         this.title = title;
     }
 
@@ -29,16 +30,6 @@ public class Teacher extends Employee implements research.Researcher {
 
     public boolean isProfessor() {
         return title == TeacherTitle.PROFESSOR;
-    }
-
-    @Override
-    public String toString() {
-        return "Teacher{" +
-                "id='" + getId() + '\'' +
-                ", name='" + getFullName() + '\'' +
-                ", department='" + getDepartment() + '\'' +
-                ", title=" + title +
-                '}';
     }
 
     @Override
@@ -84,4 +75,14 @@ public class Teacher extends Employee implements research.Researcher {
         return getFullName();
     }
 
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id='" + getId() + '\'' +
+                ", name='" + getFullName() + '\'' +
+                ", department='" + getDepartment() + '\'' +
+                ", school=" + getSchool() +
+                ", title=" + title +
+                '}';
+    }
 }
