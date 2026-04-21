@@ -1,0 +1,25 @@
+# Java compiled files
+*.class
+
+# Logs
+*.log
+
+# Serialized files
+*.ser
+
+# IntelliJ / VS Code / IDE
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build folders
+bin/
+out/
+target/
+
+# Temporary files
+*.tmp
+*.swp
