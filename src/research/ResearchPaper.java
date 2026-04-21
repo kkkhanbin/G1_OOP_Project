@@ -1,10 +1,11 @@
 package research;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResearchPaper {
+public class ResearchPaper implements Serializable {
     private String title;
     private List<String> authors;
     private int citations;
