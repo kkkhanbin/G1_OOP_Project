@@ -336,15 +336,12 @@ public class Main {
             System.out.println("Login failed");
         }
 
-        Student factoryUser = UserFactory.createUser(
-                "student",
-                "S100",
-                "newuser",
-                "123",
-                "Test",
-                "User",
-                Gender.MALE
+        User factoryUser = UserFactory.createUser(
+                "student"
         );
+
+        factoryUser.setFirstName("John");
+
 
         factoryUser.addResearchPaper();
 
