@@ -337,14 +337,13 @@ public class Main {
         }
 
         User factoryUser = UserFactory.createUser(
-                "student",
-                "S100",
-                "newuser",
-                "123",
-                "Test",
-                "User",
-                Gender.MALE
+                "student"
         );
+
+        factoryUser.setFirstName("John");
+
+
+        factoryUser.addResearchPaper();
 
         System.out.println("Created via factory:");
         System.out.println(factoryUser);

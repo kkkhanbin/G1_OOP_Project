@@ -1,0 +1,194 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package enums {
+    enum Gender {
+        MALE
+        FEMALE
+    }
+    enum SchoolType {
+        FIT
+        BS
+        ISE
+        SAM
+        KMA
+    }
+    enum TeacherTitle {
+        LECTURER
+        SENIOR_LECTURER
+        PROFESSOR
+    }
+    enum ManagerType {
+        OR
+        DEPARTMENT
+        FACULTY
+    }
+    enum LessonType {
+        LECTURE
+        PRACTICE
+    }
+}
+
+package users {
+    abstract class User {
+        - id: String
+        - username: String
+        - password: String
+        - firstName: String
+        - lastName: String
+        - gender: Gender
+        + getFullName(): String
+        + compareTo(other: User): int
+    }
+
+    class Student {
+        - major: String
+        - yearOfStudy: int
+        - gpa: double
+        - credits: int
+        - failedCoursesCount: int
+        - hIndex: int
+        + canRegister(newCredits: int): boolean
+        + canTakeMoreCourses(): boolean
+    }
+
+    class Employee {
+        - salary: double
+        - department: String
+        - school: SchoolType
+    }
+
+    class Teacher {
+        - title: TeacherTitle
+        - hIndex: int
+    }
+
+    class Manager {
+        - managerType: ManagerType
+    }
+
+    class Admin {
+    }
+
+    User <|-- Student
+    User <|-- Employee
+    Employee <|-- Teacher
+    Employee <|-- Manager
+    Employee <|-- Admin
+}
+
+package research {
+    interface Researcher {
+        + getHIndex(): int
+        + setHIndex(hIndex: int): void
+        + getResearchPapers(): List
+        + addResearchPaper(paper: ResearchPaper): void
+        + getResearcherName(): String
+    }
+
+    class ResearchPaper {
+        - title: String
+        - authors: List<String>
+        - citations: int
+        - journal: String
+        - pages: int
+        - publicationDate: LocalDate
+        - doi: String
+    }
+
+    class ResearchProject {
+        - topic: String
+        - publishedPapers: List<ResearchPaper>
+        - participants: List<Researcher>
+    }
+}
+
+package courses {
+    class Course {
+        - name: String
+        - credits: int
+        + registerStudent(student: Student): boolean
+        + addInstructor(teacher: Teacher): void
+        + putMark(student: Student, mark: Mark): void
+    }
+
+    class Lesson {
+        - type: LessonType
+        - topic: String
+        - week: int
+    }
+
+    class Mark {
+        - att1: double
+        - att2: double
+        - finalExam: double
+        + getTotal(): double
+        + isPassed(): boolean
+        + getLetterGrade(): String
+    }
+
+    class Transcript {
+        + calculateGPA(): double
+    }
+}
+
+package management {
+    class News {
+        - title: String
+        - content: String
+        - publishedAt: LocalDateTime
+        + notifyObservers(): void
+    }
+
+    interface Observer {
+        + update(news: News): void
+    }
+
+    class NewsSubscriber {
+        - name: String
+    }
+
+    class Request {
+        - sender: Employee
+        - content: String
+        - approved: boolean
+    }
+
+    class Message {
+        - sender: Employee
+        - receiver: Employee
+        - text: String
+    }
+}
+
+package database {
+    class DataStore {
+        - {static} instance: DataStore
+        - users: List<User>
+        - courses: List<Course>
+        + {static} getInstance(): DataStore
+        + save(filename: String): void
+    }
+}
+
+' Relationships
+research.Researcher <|.. users.Student
+research.Researcher <|.. users.Teacher
+users.Student "0..1" o-- "0..1" research.Researcher : researchSupervisor
+
+courses.Course "1" *-- "*" courses.Lesson
+courses.Course "*" o-- "*" users.Student
+courses.Course "*" o-- "*" users.Teacher
+courses.Course "1" *-- "*" courses.Mark
+courses.Transcript "1" *-- "*" courses.Mark
+
+management.Observer <|.. management.NewsSubscriber
+management.News "1" o-- "*" management.Observer
+management.Request "*" o-- "1" users.Employee
+management.Message "*" o-- "2" users.Employee
+
+database.DataStore "1" o-- "*" users.User
+database.DataStore "1" o-- "*" courses.Course
+database.DataStore "1" o-- "*" management.News
+
+@enduml

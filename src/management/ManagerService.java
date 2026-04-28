@@ -85,4 +85,6 @@ public class ManagerService {
             System.out.println(log);
         }
     }
+
+    public List<Request> getRequests() { return requests;}
 }
