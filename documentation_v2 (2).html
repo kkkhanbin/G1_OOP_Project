@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>University Management System — Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --d1: #1C0A02;
+  --d2: #2E1206;
+  --d3: #3D1A08;
+  --d4: #5C2810;
+  --m1: #7A3818;
+  --m2: #9B4E22;
+  --l1: #B8692E;
+  --l2: #C97D3E;
+  --l3: #D9944E;
+  --accent: #E8A85E;
+  --gold:  #F2C06E;
+  --cream: #FAF0E6;
+  --white: #FFFFFF;
+  --text:  #F5E6D3;
+  --muted: #C4A882;
+  --sidebar-w: 270px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--d1);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--d2);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--d4);
+}
+
+.sidebar-wave {
+  width: 100%;
+  height: 120px;
+  background: var(--d3);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sidebar-wave svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.sidebar-logo {
+  padding: 14px 18px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.logo-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.logo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.4;
+}
+
+.search-wrap {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--d4);
+}
+
+.search-wrap input {
+  width: 100%;
+  background: var(--d3);
+  border: 1px solid var(--d4);
+  border-radius: 6px;
+  padding: 7px 10px 7px 28px;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  outline: none;
+}
+.search-wrap input:focus { border-color: var(--accent); }
+.search-wrap input::placeholder { color: var(--muted); }
+.search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; }
+.search-wrap { position: relative; }
+
+.nav-group { padding: 10px 0 6px; border-bottom: 1px solid var(--d3); }
+.nav-group-title {
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 18px 6px;
+  font-weight: 600;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.nav-item:hover { color: var(--cream); background: rgba(232,168,94,0.07); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(232,168,94,0.1); font-weight: 500; }
+
+.nav-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.dot-a { background: var(--accent); }
+.dot-g { background: #7DC47A; }
+.dot-m { background: var(--l2); }
+.dot-s { background: #7AB8C4; }
+
+.new-badge {
+  font-size: 8px;
+  background: var(--l1);
+  color: var(--white);
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 2px;
+  font-weight: 600;
+}
+
+/* ── MAIN ────────────────────────────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  overflow-x: hidden;
+}
+
+/* ── HERO ─────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 420px;
+  background: var(--d3);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 60px 60px 100px;
+}
+
+/* Layered waves - background decoration */
+.wave-layer {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.hero-bg-wave {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-content { position: relative; z-index: 5; max-width: 620px; }
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(232,168,94,0.15);
+  border: 1px solid rgba(232,168,94,0.3);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  font-weight: 600;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.hero h1 span { color: var(--accent); }
+
+.hero-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--l3);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.hero p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-bottom: 36px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(232,168,94,0.2);
+  border-radius: 10px;
+  padding: 14px 20px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── SECTION WRAPPER ─────────────────────────────────────────── */
+.section {
+  padding: 56px 60px;
+  position: relative;
+}
+
+.section:nth-child(even) { background: var(--d2); }
+.section:nth-child(odd)  { background: var(--d1); }
+
+/* wave divider between sections */
+.wave-divider {
+  width: 100%;
+  display: block;
+  line-height: 0;
+}
+
+.section-header {
+  margin-bottom: 36px;
+}
+
+.section-eyebrow {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── PATTERN CARDS ───────────────────────────────────────────── */
+.pattern-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.pattern-card {
+  background: var(--d3);
+  border-radius: 14px;
+  padding: 26px;
+  border: 1px solid var(--d4);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.pattern-card:hover { border-color: var(--l1); transform: translateY(-2px); }
+
+.pattern-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
+}
+
+.pc-singleton::before { background: linear-gradient(90deg, var(--accent), var(--l1)); }
+.pc-factory::before   { background: linear-gradient(90deg, var(--l3), var(--l2)); }
+.pc-observer::before  { background: linear-gradient(90deg, #7DC47A, #4A9B47); }
+.pc-strategy::before  { background: linear-gradient(90deg, #7AB8C4, #4A8B9B); }
+
+.pattern-icon { font-size: 24px; margin-bottom: 12px; }
+.pattern-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.pattern-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+.pattern-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font-size: 9.5px; padding: 3px 8px; border-radius: 4px; background: var(--d4); border: 1px solid var(--m1); color: var(--muted); font-family: 'Inter', monospace; }
+
+/* ── HIERARCHY BOX ───────────────────────────────────────────── */
+.hierarchy-box {
+  background: var(--d3);
+  border: 1px solid var(--d4);
+  border-radius: 14px;
+  padding: 28px;
+  font-family: 'Inter', monospace;
+  font-size: 12px;
+  line-height: 2.1;
+  overflow-x: auto;
+}
+
+.h-abs  { color: var(--l3); font-weight: 600; }
+.h-ifc  { color: #7DC47A; font-weight: 600; }
+.h-cls  { color: var(--white); }
+.h-new  { color: var(--accent); font-weight: 600; }
+.h-dim  { color: var(--muted); font-size: 10px; }
+.h-tree { color: var(--d4); }
+
+/* ── CLASS CARDS ─────────────────────────────────────────────── */
+.class-card {
+  background: var(--d3);
+  border: 1px solid var(--d4);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: border-color 0.2s;
+}
+.class-card:hover { border-color: var(--l1); }
+
+.cc-head {
+  padding: 20px 26px;
+  border-bottom: 1px solid var(--d4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  background: linear-gradient(135deg, var(--d3), var(--d4));
+}
+
+.cc-type-badge {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 4px;
+  margin-bottom: 7px;
+  display: inline-block;
+}
+
+.badge-abstract { background: rgba(185,105,46,0.25); color: var(--l3); border: 1px solid var(--l1); }
+.badge-interface { background: rgba(125,196,122,0.15); color: #7DC47A; border: 1px solid #4A9B47; }
+.badge-class    { background: rgba(232,168,94,0.15); color: var(--accent); border: 1px solid var(--l2); }
+.badge-new      { background: rgba(232,148,78,0.2); color: var(--gold); border: 1px solid var(--l1); }
+.badge-enum     { background: rgba(122,184,196,0.15); color: #7AB8C4; border: 1px solid #4A8B9B; }
+
+.cc-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 5px;
+}
+
+.cc-extends {
+  font-family: 'Inter', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+.cc-extends em { color: var(--l3); font-style: normal; }
+
+.cc-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.55;
+  max-width: 460px;
+  margin-top: 8px;
+}
+
+.cc-pkg {
+  font-family: 'Inter', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+  background: var(--d4);
+  padding: 4px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  border: 1px solid var(--m1);
+}
+
+.cc-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.cc-section { padding: 20px 26px; }
+.cc-section:first-child { border-right: 1px solid var(--d4); }
+
+.cc-section-title {
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.field-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-family: 'Inter', monospace;
+  font-size: 10.5px;
+}
+.field-row:last-child { border-bottom: none; }
+.f-type { color: var(--l3); min-width: 80px; flex-shrink: 0; }
+.f-name { color: var(--accent); flex: 1; }
+.f-note { font-size: 9px; color: var(--muted); }
+
+.method-row {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-family: 'Inter', monospace;
+  font-size: 10.5px;
+}
+.method-row:last-child { border-bottom: none; }
+.m-sig { color: var(--white); margin-bottom: 2px; }
+.m-ret { color: #7DC47A; }
+.m-name { color: var(--l3); }
+.m-param { color: var(--l2); }
+.m-note { font-size: 9.5px; color: var(--muted); font-family: 'Inter', sans-serif; line-height: 1.4; }
+
+/* ── CODE BLOCK ──────────────────────────────────────────────── */
+.code-block {
+  background: var(--d1);
+  border: 1px solid var(--d4);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.code-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--d2);
+  border-bottom: 1px solid var(--d4);
+}
+.code-dots { display: flex; gap: 5px; }
+.code-dot { width: 9px; height: 9px; border-radius: 50%; }
+.code-dot:nth-child(1) { background: #FF5F57; }
+.code-dot:nth-child(2) { background: #FEBC2E; }
+.code-dot:nth-child(3) { background: #28C840; }
+.code-lang { font-size: 9px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+.code-block pre { padding: 16px; font-family: 'Inter', monospace; font-size: 11.5px; line-height: 1.8; color: var(--text); overflow-x: auto; }
+.kw { color: #D4A5FF; }
+.cl { color: #85C1E9; }
+.fn { color: var(--l3); }
+.st { color: #ABEBC6; }
+.cm { color: var(--muted); font-style: italic; }
+.nm { color: var(--accent); }
+
+/* ── ENUMS GRID ──────────────────────────────────────────────── */
+.enums-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.enum-card {
+  background: var(--d3);
+  border: 1px solid var(--d4);
+  border-radius: 10px;
+  padding: 18px;
+  transition: border-color 0.2s;
+}
+.enum-card:hover { border-color: var(--l1); }
+
+.enum-name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.enum-pkg  { font-family: 'Inter', monospace; font-size: 9px; color: var(--muted); margin-bottom: 10px; }
+.enum-val  { font-family: 'Inter', monospace; font-size: 10.5px; color: var(--text); padding: 3px 8px; margin-bottom: 3px; background: rgba(232,168,94,0.07); border-left: 2px solid var(--l1); border-radius: 2px; }
+
+/* ── EXCEPTIONS ──────────────────────────────────────────────── */
+.exc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.exc-card {
+  background: var(--d3);
+  border: 1px solid rgba(184,105,46,0.4);
+  border-radius: 12px;
+  padding: 22px;
+}
+.exc-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--l3); margin-bottom: 5px; }
+.exc-ext  { font-family: 'Inter', monospace; font-size: 9.5px; color: var(--muted); margin-bottom: 10px; }
+.exc-desc { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+.exc-when { margin-top: 10px; font-family: 'Inter', monospace; font-size: 9.5px; color: var(--accent); }
+
+/* ── SCROLLBAR ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--d2); }
+::-webkit-scrollbar-thumb { background: var(--d4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--m1); }
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.footer {
+  padding: 32px 60px;
+  background: var(--d2);
+  border-top: 1px solid var(--d4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.footer-text { font-family: 'Inter', monospace; font-size: 10px; color: var(--muted); }
+
+/* ── UTILITY ─────────────────────────────────────────────────── */
+.tag-new-inline { display: inline-block; font-size: 8px; padding: 1px 5px; border-radius: 3px; background: var(--l1); color: var(--white); font-weight: 700; margin-left: 4px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-wave">
+    <div class="sidebar-logo">
+      <div class="logo-tag">◆ Docs v1.0</div>
+      <div class="logo-title">University Management System</div>
+    </div>
+    <svg viewBox="0 0 270 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 30 Q67 10 135 28 Q202 46 270 20 L270 50 L0 50 Z" fill="#1C0A02" opacity="0.7"/>
+      <path d="M0 40 Q90 20 180 38 Q225 46 270 32 L270 50 L0 50 Z" fill="#1C0A02"/>
+    </svg>
+  </div>
+
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" placeholder="Search classes..." id="searchInput" oninput="filterNav(this.value)">
+  </div>
+
+  <nav id="navContent">
+    <div class="nav-group">
+      <div class="nav-group-title">Overview</div>
+      <a class="nav-item active" href="#overview"><span class="nav-dot dot-a"></span>Project Overview</a>
+      <a class="nav-item" href="#patterns"><span class="nav-dot dot-a"></span>Design Patterns</a>
+      <a class="nav-item" href="#hierarchy"><span class="nav-dot dot-a"></span>Class Hierarchy</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">users package</div>
+      <a class="nav-item" href="#user"><span class="nav-dot dot-m"></span>User</a>
+      <a class="nav-item" href="#employee"><span class="nav-dot dot-m"></span>Employee</a>
+      <a class="nav-item" href="#student"><span class="nav-dot dot-m"></span>Student</a>
+      <a class="nav-item" href="#teacher"><span class="nav-dot dot-m"></span>Teacher</a>
+      <a class="nav-item" href="#manager"><span class="nav-dot dot-m"></span>Manager</a>
+      <a class="nav-item" href="#admin"><span class="nav-dot dot-m"></span>Admin</a>
+      <a class="nav-item" href="#researcheremployee"><span class="nav-dot dot-a"></span>ResearcherEmployee <span class="tag-new-inline">NEW</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">courses package</div>
+      <a class="nav-item" href="#course"><span class="nav-dot dot-m"></span>Course</a>
+      <a class="nav-item" href="#mark"><span class="nav-dot dot-m"></span>Mark</a>
+      <a class="nav-item" href="#lesson"><span class="nav-dot dot-m"></span>Lesson</a>
+      <a class="nav-item" href="#transcript"><span class="nav-dot dot-m"></span>Transcript</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">research package</div>
+      <a class="nav-item" href="#researcher"><span class="nav-dot dot-g"></span>Researcher</a>
+      <a class="nav-item" href="#researchpaper"><span class="nav-dot dot-m"></span>ResearchPaper</a>
+      <a class="nav-item" href="#researchproject"><span class="nav-dot dot-m"></span>ResearchProject</a>
+      <a class="nav-item" href="#researchutils"><span class="nav-dot dot-m"></span>ResearchUtils</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">management</div>
+      <a class="nav-item" href="#adminservice"><span class="nav-dot dot-m"></span>AdminService</a>
+      <a class="nav-item" href="#managerservice"><span class="nav-dot dot-m"></span>ManagerService</a>
+      <a class="nav-item" href="#news"><span class="nav-dot dot-a"></span>News (Subject)</a>
+      <a class="nav-item" href="#observer"><span class="nav-dot dot-g"></span>Observer</a>
+      <a class="nav-item" href="#request"><span class="nav-dot dot-m"></span>Request</a>
+      <a class="nav-item" href="#message"><span class="nav-dot dot-m"></span>Message</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">System</div>
+      <a class="nav-item" href="#datastore"><span class="nav-dot dot-a"></span>DataStore</a>
+      <a class="nav-item" href="#authservice"><span class="nav-dot dot-m"></span>AuthService</a>
+      <a class="nav-item" href="#userfactory"><span class="nav-dot dot-a"></span>UserFactory</a>
+      <a class="nav-item" href="#comparators"><span class="nav-dot dot-s"></span>Comparators</a>
+      <a class="nav-item" href="#exceptions"><span class="nav-dot dot-a"></span>Exceptions</a>
+      <a class="nav-item" href="#enums"><span class="nav-dot dot-s"></span>Enumerations</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ═══ MAIN ════════════════════════════════════════════════════ -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero" id="overview">
+  <!-- Background wavy layers -->
+  <div class="hero-bg-wave">
+    <svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
+      <path d="M0 180 Q200 80 400 160 Q600 240 800 120 Q1000 20 1200 100 L1200 420 L0 420 Z" fill="#2E1206" opacity="0.7"/>
+      <path d="M0 240 Q150 160 350 220 Q550 280 750 190 Q950 100 1200 160 L1200 420 L0 420 Z" fill="#3D1A08" opacity="0.8"/>
+      <path d="M0 300 Q250 240 450 290 Q650 340 850 260 Q1050 180 1200 230 L1200 420 L0 420 Z" fill="#2E1206" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <!-- Bottom wave -->
+  <svg class="wave-layer" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 40 Q180 0 360 40 Q540 80 720 40 Q900 0 1080 40 Q1260 80 1440 40 L1440 80 L0 80 Z" fill="#1C0A02"/>
+    <path d="M0 60 Q360 20 720 60 Q1080 100 1440 60 L1440 80 L0 80 Z" fill="#1C0A02" opacity="0.7"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-tag">◆ OOP Group G1 &nbsp;·&nbsp; Java SE 21 &nbsp;·&nbsp; 2026</div>
+    <h1>University<br><span>Management</span><br>System</h1>
+    <div class="hero-sub">Research-Oriented University Information System</div>
+    <p>Console-based Java application implementing academic management, research tracking, user authentication, and data persistence using four industry-standard design patterns.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">38</div><div class="stat-label">Java Files</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Patterns</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Classes</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Enums</div></div>
+      <div class="stat"><div class="stat-num">22</div><div class="stat-label">Requirements</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WAVE between sections -->
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0 Q360 40 720 20 Q1080 0 1440 30 L1440 40 L0 40 Z" fill="#2E1206"/>
+</svg>
+
+<!-- DESIGN PATTERNS -->
+<div class="section" id="patterns">
+  <div class="section-header">
+    <div class="section-eyebrow">01 — Architecture</div>
+    <div class="section-title">Design Patterns</div>
+    <div class="section-subtitle">Four industry-standard patterns implemented throughout the system</div>
+  </div>
+
+  <div class="pattern-grid">
+    <div class="pattern-card pc-singleton">
+      <div class="pattern-icon">◈</div>
+      <div class="pattern-name">Singleton</div>
+      <div class="pattern-desc">Ensures only one <code style="color:var(--accent);font-size:11px">DataStore</code> instance exists. Private constructor. <code style="color:var(--accent);font-size:11px">getInstance()</code> creates lazily. Full serialization support — save to disk, load back.</div>
+      <div class="pattern-chips">
+        <span class="chip">DataStore</span><span class="chip">getInstance()</span><span class="chip">save()</span><span class="chip">load()</span>
+      </div>
+    </div>
+    <div class="pattern-card pc-factory">
+      <div class="pattern-icon">◇</div>
+      <div class="pattern-name">Factory</div>
+      <div class="pattern-desc">Encapsulates user creation in <code style="color:var(--l3);font-size:11px">UserFactory.createUser(type, ...)</code>. Returns correct subclass (Student, Teacher, Manager, Admin) by type string. Throws <code style="color:var(--l3);font-size:11px">IllegalArgumentException</code> for unknown types.</div>
+      <div class="pattern-chips">
+        <span class="chip">UserFactory</span><span class="chip">createUser()</span><span class="chip">Student</span><span class="chip">Teacher</span>
+      </div>
+    </div>
+    <div class="pattern-card pc-observer">
+      <div class="pattern-icon">◉</div>
+      <div class="pattern-name">Observer</div>
+      <div class="pattern-desc"><code style="color:#7DC47A;font-size:11px">News</code> is the Subject — holds <code style="color:#7DC47A;font-size:11px">List&lt;Observer&gt;</code>. <code style="color:#7DC47A;font-size:11px">NewsSubscriber</code> implements Observer. When <code style="color:#7DC47A;font-size:11px">publishNews()</code> is called, <code style="color:#7DC47A;font-size:11px">notifyObservers()</code> fires all subscribers.</div>
+      <div class="pattern-chips">
+        <span class="chip">News</span><span class="chip">Observer</span><span class="chip">NewsSubscriber</span><span class="chip">notifyObservers()</span>
+      </div>
+    </div>
+    <div class="pattern-card pc-strategy">
+      <div class="pattern-icon">◫</div>
+      <div class="pattern-name">Strategy</div>
+      <div class="pattern-desc"><code style="color:#7AB8C4;font-size:11px">printPapers(Comparator c)</code> and <code style="color:#7AB8C4;font-size:11px">printAllPapers()</code> accept any comparator at runtime. Five interchangeable sorting strategies: by citations, date, pages, GPA, name.</div>
+      <div class="pattern-chips">
+        <span class="chip">PaperByCitations</span><span class="chip">PaperByDate</span><span class="chip">PaperByPages</span><span class="chip">StudentGpa</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 20 Q360 60 720 30 Q1080 0 1440 20 L1440 40 L0 40 Z" fill="#1C0A02"/>
+</svg>
+
+<!-- CLASS HIERARCHY -->
+<div class="section" id="hierarchy">
+  <div class="section-header">
+    <div class="section-eyebrow">02 — Structure</div>
+    <div class="section-title">Class Hierarchy</div>
+    <div class="section-subtitle">Inheritance tree and interface implementations</div>
+  </div>
+
+  <!-- ── VISUAL HIERARCHY DIAGRAM ── -->
+  <style>
+    .hd-node {
+      display:flex; flex-direction:column; align-items:center;
+      background:var(--d4); border:1px solid var(--m1);
+      border-radius:10px; padding:10px 18px; text-align:center;
+      min-width:110px;
+    }
+    .hd-node .nt { font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+    .hd-node .nn { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; color:var(--white); }
+    .hd-node .ni { font-size:8.5px; color:#7DC47A; margin-top:3px; }
+    .hd-node .na { font-size:8px; color:var(--accent); margin-top:2px; }
+    .hd-node-abs { border-color:var(--l1) !important; border-width:2px !important; }
+    .hd-node-abs .nn { color:var(--l3); }
+    .hd-node-new { border-color:var(--accent) !important; border-width:2px !important; background:linear-gradient(135deg,var(--d3),var(--d4)) !important; }
+    .hd-node-new .nn { color:var(--accent); }
+    .hd-vline { width:2px; background:var(--m1); opacity:0.45; margin:0 auto; }
+    .hd-hline { height:2px; background:var(--m1); opacity:0.35; }
+    .ifc-box {
+      flex:1; min-width:220px;
+      border-radius:12px; padding:16px 18px;
+    }
+    .ifc-box .it { font-size:8.5px; letter-spacing:2px; font-weight:700; text-transform:uppercase; margin-bottom:5px; }
+    .ifc-box .in { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; margin-bottom:10px; }
+    .ifc-box .im { font-family:'Inter',monospace; font-size:10px; color:var(--muted); padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .ifc-box .im:last-child { border-bottom:none; }
+    .ifc-impl { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+    .ifc-tag { font-size:9px; padding:2px 8px; border-radius:4px; font-weight:500; }
+  </style>
+
+  <!-- LEVEL 1: User -->
+  <div style="display:flex;justify-content:center;margin-bottom:0">
+    <div class="hd-node hd-node-abs">
+      <div class="nt">abstract class</div>
+      <div class="nn">User</div>
+      <div class="ni" style="color:var(--muted)">Serializable · Comparable&lt;User&gt;</div>
+    </div>
+  </div>
+
+  <!-- ── LEGEND ── -->
+  <div style="display:flex;gap:18px;margin-bottom:24px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:7px">
+      <div style="width:30px;height:2px;background:var(--l3)"></div>
+      <div style="width:0;height:0;border-left:6px solid var(--l3);border-top:4px solid transparent;border-bottom:4px solid transparent"></div>
+      <span style="font-size:10px;color:var(--l3);font-weight:600">extends</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px">
+      <div style="width:30px;height:2px;background:#7DC47A;border-top:2px dashed #7DC47A;height:0"></div>
+      <div style="width:0;height:0;border-left:6px solid #7DC47A;border-top:4px solid transparent;border-bottom:4px solid transparent"></div>
+      <span style="font-size:10px;color:#7DC47A;font-weight:600">implements</span>
+    </div>
+  </div>
+
+  <!-- LEVEL 1: User -->
+  <div style="display:flex;justify-content:center;margin-bottom:0">
+    <div class="hd-node hd-node-abs">
+      <div class="nt">abstract class</div>
+      <div class="nn">User</div>
+      <div class="ni" style="color:var(--muted)">Serializable · Comparable&lt;User&gt;</div>
+    </div>
+  </div>
+
+  <!-- down line with "extends" labels -->
+  <div style="display:flex;justify-content:center;position:relative;height:44px">
+    <!-- vertical line down -->
+    <div style="width:2px;height:44px;background:var(--l3);opacity:0.6;margin:0 auto;position:absolute;left:50%"></div>
+    <!-- horizontal spread line -->
+    <div style="position:absolute;top:44px;left:50%;transform:translateX(-50%);width:380px;height:2px;background:var(--l3);opacity:0.4"></div>
+    <!-- left tick to Employee -->
+    <div style="position:absolute;top:44px;left:calc(50% - 95px);width:2px;height:12px;background:var(--l3);opacity:0.5"></div>
+    <!-- right tick to Student -->
+    <div style="position:absolute;top:44px;left:calc(50% + 95px);width:2px;height:12px;background:var(--l3);opacity:0.5"></div>
+    <!-- "extends" label on left branch -->
+    <div style="position:absolute;top:22px;left:calc(50% - 80px);background:var(--d3);border:1px solid var(--l3);border-radius:4px;padding:1px 6px;font-size:8.5px;color:var(--l3);font-weight:600;white-space:nowrap">extends</div>
+    <!-- "extends" label on right branch -->
+    <div style="position:absolute;top:22px;left:calc(50% + 20px);background:var(--d3);border:1px solid var(--l3);border-radius:4px;padding:1px 6px;font-size:8.5px;color:var(--l3);font-weight:600;white-space:nowrap">extends</div>
+  </div>
+
+  <!-- LEVEL 2: Employee + Student -->
+  <div style="display:flex;justify-content:center;gap:130px;margin-top:14px">
+
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div class="hd-node">
+        <div class="nt">class</div>
+        <div class="nn">Employee</div>
+      </div>
+
+      <!-- vertical line down from Employee with label -->
+      <div style="position:relative;height:44px;display:flex;justify-content:center">
+        <div style="width:2px;height:44px;background:var(--l3);opacity:0.5"></div>
+        <div style="position:absolute;top:12px;left:6px;background:var(--d3);border:1px solid var(--l3);border-radius:4px;padding:1px 6px;font-size:8.5px;color:var(--l3);font-weight:600;white-space:nowrap">extends</div>
+        <!-- horizontal spread for children -->
+        <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:460px;height:2px;background:var(--l3);opacity:0.35"></div>
+        <div style="position:absolute;bottom:0;left:calc(50% - 228px);width:2px;height:10px;background:var(--l3);opacity:0.4"></div>
+        <div style="position:absolute;bottom:0;left:calc(50% - 76px);width:2px;height:10px;background:var(--l3);opacity:0.4"></div>
+        <div style="position:absolute;bottom:0;left:calc(50% + 72px);width:2px;height:10px;background:var(--l3);opacity:0.4"></div>
+        <div style="position:absolute;bottom:0;left:calc(50% + 220px);width:2px;height:10px;background:var(--l3);opacity:0.4"></div>
+      </div>
+    </div>
+
+    <div class="hd-node" style="height:fit-content">
+      <div class="nt">class</div>
+      <div class="nn">Student</div>
+      <!-- implements badge -->
+      <div style="margin-top:6px;display:flex;align-items:center;gap:4px">
+        <div style="width:14px;height:1px;border-top:1.5px dashed #7DC47A;opacity:0.8"></div>
+        <div style="width:0;height:0;border-left:5px solid #7DC47A;border-top:3px solid transparent;border-bottom:3px solid transparent;opacity:0.8"></div>
+        <span style="font-size:8.5px;color:#7DC47A;font-style:italic">implements Researcher</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVEL 3: Employee children -->
+  <div style="display:flex;justify-content:flex-start;padding-left:10px;gap:12px;margin-top:10px;flex-wrap:wrap">
+    <div class="hd-node" style="min-width:90px">
+      <div class="nt">class</div>
+      <div class="nn">Manager</div>
+    </div>
+    <div class="hd-node" style="min-width:80px">
+      <div class="nt">class</div>
+      <div class="nn">Admin</div>
+    </div>
+    <div class="hd-node" style="min-width:120px">
+      <div class="nt">class</div>
+      <div class="nn">Teacher</div>
+      <div style="margin-top:6px;display:flex;align-items:center;gap:4px">
+        <div style="width:10px;height:0;border-top:1.5px dashed #7DC47A;opacity:0.8"></div>
+        <div style="width:0;height:0;border-left:5px solid #7DC47A;border-top:3px solid transparent;border-bottom:3px solid transparent;opacity:0.8"></div>
+        <span style="font-size:8px;color:#7DC47A;font-style:italic">implements Researcher</span>
+      </div>
+      <div class="na">PROFESSOR → always researcher</div>
+    </div>
+    <div class="hd-node hd-node-new" style="min-width:160px;position:relative">
+      <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--l1);color:#fff;font-size:7px;padding:1px 7px;border-radius:3px;font-weight:700;white-space:nowrap">★ NEW</div>
+      <div class="nt">class</div>
+      <div class="nn">ResearcherEmployee</div>
+      <div style="margin-top:6px;display:flex;align-items:center;gap:4px">
+        <div style="width:10px;height:0;border-top:1.5px dashed #7DC47A;opacity:0.8"></div>
+        <div style="width:0;height:0;border-left:5px solid #7DC47A;border-top:3px solid transparent;border-bottom:3px solid transparent;opacity:0.8"></div>
+        <span style="font-size:8px;color:#7DC47A;font-style:italic">implements Researcher</span>
+      </div>
+      <div class="na">not Teacher, not Student</div>
+    </div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div style="margin:28px 0 20px;border-top:1px dashed var(--d4)"></div>
+
+  <!-- INTERFACES ROW -->
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+
+    <!-- Researcher -->
+    <div class="ifc-box" style="background:rgba(125,196,122,0.06);border:1px solid rgba(125,196,122,0.25)">
+      <div class="it" style="color:#7DC47A">«interface»</div>
+      <div class="in" style="color:#7DC47A">Researcher</div>
+      <div class="im">getHIndex() / setHIndex(int)</div>
+      <div class="im">addResearchPaper(ResearchPaper p)</div>
+      <div class="im" style="color:var(--accent)">printPapers(Comparator c) ← Strategy</div>
+      <div class="im">getResearcherName()</div>
+      <div class="ifc-impl">
+        <span class="ifc-tag" style="background:rgba(125,196,122,0.1);color:#7DC47A;border:1px solid rgba(125,196,122,0.2)">Student</span>
+        <span class="ifc-tag" style="background:rgba(125,196,122,0.1);color:#7DC47A;border:1px solid rgba(125,196,122,0.2)">Teacher</span>
+        <span class="ifc-tag" style="background:rgba(232,168,94,0.12);color:var(--accent);border:1px solid rgba(232,168,94,0.25)">ResearcherEmployee ★</span>
+      </div>
+    </div>
+
+    <!-- Observer -->
+    <div class="ifc-box" style="background:rgba(122,184,196,0.06);border:1px solid rgba(122,184,196,0.25)">
+      <div class="it" style="color:#7AB8C4">«interface»</div>
+      <div class="in" style="color:#7AB8C4">Observer</div>
+      <div class="im">update(News news)</div>
+      <div class="ifc-impl">
+        <span class="ifc-tag" style="background:rgba(122,184,196,0.1);color:#7AB8C4;border:1px solid rgba(122,184,196,0.2)">NewsSubscriber</span>
+      </div>
+    </div>
+
+    <!-- News Subject -->
+    <div class="ifc-box" style="background:rgba(232,168,94,0.06);border:1px solid rgba(232,168,94,0.25)">
+      <div class="it" style="color:var(--accent)">«subject» Observer Pattern</div>
+      <div class="in" style="color:var(--accent)">News</div>
+      <div class="im">attach(Observer o)</div>
+      <div class="im">detach(Observer o)</div>
+      <div class="im" style="color:var(--l3)">notifyObservers()</div>
+    </div>
+
+  </div>
+
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 30 Q240 0 480 25 Q720 50 960 20 Q1200 0 1440 30 L1440 40 L0 40 Z" fill="#2E1206"/>
+</svg>
+
+<!-- USERS PACKAGE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">03 — users package</div>
+    <div class="section-title">User Hierarchy</div>
+    <div class="section-subtitle">Abstract base class through concrete implementations</div>
+  </div>
+
+  <!-- USER -->
+  <div class="class-card" id="user">
+    <div class="cc-head">
+      <div>
+        <div class="cc-type-badge badge-abstract">abstract class</div>
+        <div class="cc-name">User</div>
+        <div class="cc-extends">implements <em>Serializable</em>, <em>Comparable&lt;User&gt;</em></div>
+        <div class="cc-desc">Base class for all system participants. Provides core identity, credentials, and natural ordering by id. Cannot be instantiated directly.</div>
+      </div>
+      <div class="cc-pkg">users.User</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">id</span><span class="f-note">Unique identifier</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">username</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">password</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">firstName / lastName</span></div>
+        <div class="field-row"><span class="f-type">Gender</span><span class="f-name">gender</span><span class="f-note">MALE / FEMALE</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getFullName</span>()</div><div class="m-note">firstName + " " + lastName</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">int</span> <span class="m-name">compareTo</span>(<span class="m-param">User other</span>)</div><div class="m-note">Natural order by id</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">boolean</span> <span class="m-name">equals</span>(<span class="m-param">Object o</span>)</div><div class="m-note">Equality by id only</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">int</span> <span class="m-name">hashCode</span>()</div><div class="m-note">Hash by id — critical for HashMap&lt;Student,Mark&gt;</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDENT -->
+  <div class="class-card" id="student">
+    <div class="cc-head">
+      <div>
+        <div class="cc-type-badge badge-class">class</div>
+        <div class="cc-name">Student</div>
+        <div class="cc-extends">extends <em>User</em> implements <em>Researcher</em></div>
+        <div class="cc-desc">Bachelor student. 21-credit limit enforced via addCredits(). Fail limit max 3. 4th-year students require supervisor with h-index ≥ 3. Can view own marks, courses, rate teachers.</div>
+      </div>
+      <div class="cc-pkg">users.Student</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">major</span><span class="f-note">"CS", "IS" etc.</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">yearOfStudy</span><span class="f-note">1–4</span></div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">gpa</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">registeredCredits</span><span class="f-note">Max 21</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">failedCoursesCount</span><span class="f-note">Max 3</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Course&gt;</span><span class="f-name">registeredCourses</span></div>
+        <div class="field-row"><span class="f-type">Researcher</span><span class="f-name">researchSupervisor</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">boolean</span> <span class="m-name">canRegister</span>(<span class="m-param">int credits</span>)</div><div class="m-note">registeredCredits + newCredits ≤ 21</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addCredits</span>(<span class="m-param">int n</span>)</div><div class="m-note">Called by Course after registration</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">viewCourses</span>()</div><div class="m-note">Prints all registered courses</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">viewMarks</span>()</div><div class="m-note">Prints marks from all courses</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">rateTeacher</span>(<span class="m-param">Teacher t, int r</span>)</div><div class="m-note">Rating 1–5, calls teacher.addRating()</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">assignResearchSupervisor</span>(<span class="m-param">Researcher r</span>)</div><div class="m-note">Year-4 only; throws InvalidSupervisorException if h-index &lt; 3</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACHER -->
+  <div class="class-card" id="teacher">
+    <div class="cc-head">
+      <div>
+        <div class="cc-type-badge badge-class">class</div>
+        <div class="cc-name">Teacher</div>
+        <div class="cc-extends">extends <em>Employee</em> implements <em>Researcher</em></div>
+        <div class="cc-desc">PROFESSOR always has activeResearcher=true (set automatically). Non-professors opt-in via becomeResearcher(). Tracks courses, grades students, collects ratings.</div>
+      </div>
+      <div class="cc-pkg">users.Teacher</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">TeacherTitle</span><span class="f-name">title</span><span class="f-note">TUTOR/LECTURER/SENIOR_LECTURER/PROFESSOR</span></div>
+        <div class="field-row"><span class="f-type">boolean</span><span class="f-name">activeResearcher</span><span class="f-note">Auto-true for PROFESSOR</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Course&gt;</span><span class="f-name">courses</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Integer&gt;</span><span class="f-name">ratings</span><span class="f-note">Student ratings 1–5</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">hIndex</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">setTitle</span>(<span class="m-param">TeacherTitle t</span>)</div><div class="m-note">Promotion to PROFESSOR → auto activeResearcher=true</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">becomeResearcher</span>()</div><div class="m-note">Non-professors explicitly opt-in</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">putMark</span>(<span class="m-param">Course c, Student s, Mark m</span>)</div><div class="m-note">Teacher grades student — validates course ownership</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">viewStudents</span>(<span class="m-param">Course c</span>)</div><div class="m-note">Lists students with GPA and marks</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">double</span> <span class="m-name">getAverageRating</span>()</div><div class="m-note">Average of all student ratings</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCHEREMPLOYEE -->
+  <div class="class-card" id="researcheremployee">
+    <div class="cc-head">
+      <div>
+        <div class="cc-type-badge badge-new">★ NEW class</div>
+        <div class="cc-name">ResearcherEmployee</div>
+        <div class="cc-extends">extends <em>Employee</em> implements <em>Researcher</em></div>
+        <div class="cc-desc">An employee who is a researcher but neither Teacher nor Student. Satisfies requirement: "there can be an employee who is neither Teacher nor Student, but IS a Researcher." Can supervise 4th-year students if h-index ≥ 3.</div>
+      </div>
+      <div class="cc-pkg">users.ResearcherEmployee</div>
+    </div>
+    <div style="padding: 0 26px 22px">
+      <div class="code-block">
+        <div class="code-top"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-lang">Java — usage example</div></div>
+        <pre><span class="cl">ResearcherEmployee</span> re1 = <span class="kw">new</span> <span class="cl">ResearcherEmployee</span>(
+    <span class="st">"RE1"</span>, <span class="st">"zarina"</span>, <span class="st">"123"</span>, <span class="st">"Zarina"</span>, <span class="st">"Bekova"</span>, <span class="cl">Gender</span>.FEMALE,
+    <span class="nm">350000</span>, <span class="st">"Research Lab"</span>, <span class="cl">SchoolType</span>.FIT
+);
+re1.<span class="fn">setHIndex</span>(<span class="nm">4</span>);
+re1.<span class="fn">addResearchPaper</span>(paper);
+project.<span class="fn">joinProject</span>(re1);          <span class="cm">// joins as Researcher</span>
+s4.<span class="fn">assignResearchSupervisor</span>(re1);  <span class="cm">// hIndex=4 ≥ 3 → OK</span></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 10 Q360 50 720 20 Q1080 -10 1440 30 L1440 40 L0 40 Z" fill="#1C0A02"/>
+</svg>
+
+<!-- COURSES PACKAGE -->
+<div class="section" id="course">
+  <div class="section-header">
+    <div class="section-eyebrow">04 — courses package</div>
+    <div class="section-title">Academic System</div>
+    <div class="section-subtitle">Course management, grading, and transcripts</div>
+  </div>
+
+  <div class="class-card">
+    <div class="cc-head">
+      <div>
+        <div class="cc-type-badge badge-class">class</div>
+        <div class="cc-name">Course</div>
+        <div class="cc-extends">implements <em>Serializable</em></div>
+        <div class="cc-desc">Central academic entity. Credit limit (21) and fail limit (3) enforced on registration. Supports major/year filtering. Multiple instructors. Bidirectionally links to Student and Teacher on registration.</div>
+      </div>
+      <div class="cc-pkg">courses.Course</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">name</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">credits</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">targetMajor</span><span class="f-note">"Any" = no restriction</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">targetYear</span><span class="f-note">0 = any year</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Student&gt;</span><span class="f-name">students</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Teacher&gt;</span><span class="f-name">instructors</span><span class="f-note">Multiple allowed</span></div>
+        <div class="field-row"><span class="f-type">Map&lt;Student,Mark&gt;</span><span class="f-name">studentMarks</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Business Rules in registerStudent()</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">① canTakeMoreCourses()</div><div class="m-note">failedCoursesCount &lt; 3</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">② canRegister(credits)</div><div class="m-note">registeredCredits + newCredits ≤ 21</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">③ major check</div><div class="m-note">student.getMajor() == targetMajor (if not "Any")</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">④ year check</div><div class="m-note">student.getYearOfStudy() == targetYear (if != 0)</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">⑤ on success</div><div class="m-note">student.addCredits() + student.addCourse(this)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARK -->
+  <div class="class-card" id="mark" style="margin-top:16px">
+    <div class="cc-head">
+      <div>
+        <div class="cc-type-badge badge-class">class</div>
+        <div class="cc-name">Mark</div>
+        <div class="cc-extends">implements <em>Serializable</em></div>
+        <div class="cc-desc">att1 + att2 + finalExam. isPassed() ≥ 50. Letter grades A through F.</div>
+      </div>
+      <div class="cc-pkg">courses.Mark</div>
+    </div>
+    <div style="padding:18px 26px">
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="chip" style="color:var(--accent)">A (95+)</span><span class="chip">A- (90)</span><span class="chip">B+ (85)</span><span class="chip">B (80)</span><span class="chip">B- (75)</span><span class="chip">C+ (70)</span><span class="chip">C (65)</span><span class="chip">C- (60)</span><span class="chip">D+ (55)</span><span class="chip">D (50)</span><span class="chip" style="color:#E87A7A">F (&lt;50)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 35 Q480 5 960 30 Q1200 45 1440 15 L1440 40 L0 40 Z" fill="#2E1206"/>
+</svg>
+
+<!-- RESEARCH PACKAGE -->
+<div class="section" id="researcher">
+  <div class="section-header">
+    <div class="section-eyebrow">05 — research package</div>
+    <div class="section-title">Research System</div>
+    <div class="section-subtitle">Researcher interface, papers, projects, and utility methods</div>
+  </div>
+
+  <div class="class-card">
+    <div class="cc-head">
+      <div>
+        <div class="cc-type-badge badge-interface">interface</div>
+        <div class="cc-name">Researcher</div>
+        <div class="cc-desc">Defines the research contract. The printPapers(Comparator) method is the core of the Strategy pattern. Implemented by Student, Teacher, ResearcherEmployee.</div>
+      </div>
+      <div class="cc-pkg">research.Researcher</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Contract</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">int</span> <span class="m-name">getHIndex</span>() / <span class="m-name">setHIndex</span>(<span class="m-param">int</span>)</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">List&lt;ResearchPaper&gt;</span> <span class="m-name">getResearchPapers</span>()</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addResearchPaper</span>(<span class="m-param">ResearchPaper p</span>)</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printPapers</span>(<span class="m-param">Comparator&lt;ResearchPaper&gt; c</span>)</div><div class="m-note">★ Strategy pattern hook</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getResearcherName</span>()</div></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Implementations</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Student</div><div class="m-note">Bachelor researchers — can be supervisees</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Teacher</div><div class="m-note">PROFESSOR: always. Others: opt-in via becomeResearcher()</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--gold)">ResearcherEmployee ★NEW</div><div class="m-note">Pure researcher role — neither Teacher nor Student</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="code-block" id="researchpaper">
+      <div class="code-top"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-lang">ResearchPaper — IEEE Xplore fields</div></div>
+      <pre><span class="cl">ResearchPaper</span> p1 = <span class="kw">new</span> <span class="cl">ResearchPaper</span>(
+    <span class="st">"AI in Education"</span>,                             <span class="cm">// title</span>
+    <span class="cl">List</span>.of(<span class="st">"Dias Tanirbergen"</span>, <span class="st">"Aliya Serik"</span>),     <span class="cm">// authors</span>
+    <span class="nm">25</span>,                                               <span class="cm">// citations</span>
+    <span class="st">"IEEE Access"</span>,                                   <span class="cm">// journal</span>
+    <span class="nm">12</span>,                                               <span class="cm">// pages</span>
+    <span class="cl">LocalDate</span>.of(<span class="nm">2024</span>, <span class="nm">5</span>, <span class="nm">10</span>),                      <span class="cm">// publicationDate</span>
+    <span class="st">"10.1000/182"</span>                                    <span class="cm">// doi</span>
+);
+
+<span class="cm">// Strategy pattern — sort by any comparator at runtime</span>
+t1.<span class="fn">printPapers</span>(<span class="kw">new</span> <span class="cl">PaperByCitationsComparator</span>());
+t1.<span class="fn">printPapers</span>(<span class="kw">new</span> <span class="cl">PaperByDateComparator</span>());
+<span class="cl">ResearchUtils</span>.<span class="fn">printAllPapers</span>(researchers, <span class="kw">new</span> <span class="cl">PaperByPagesComparator</span>());</pre>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 20 Q360 -5 720 25 Q1080 55 1440 15 L1440 40 L0 40 Z" fill="#1C0A02"/>
+</svg>
+
+<!-- SYSTEM LAYER -->
+<div class="section" id="datastore">
+  <div class="section-header">
+    <div class="section-eyebrow">06 — System Layer</div>
+    <div class="section-title">DataStore · AuthService · Factory</div>
+    <div class="section-subtitle">Singleton persistence, authentication, and object creation</div>
+  </div>
+
+  <div class="pattern-grid">
+    <div class="pattern-card pc-singleton">
+      <div class="pattern-icon">◈</div>
+      <div class="pattern-name">DataStore — Singleton</div>
+      <div class="pattern-desc">Private constructor + static getInstance(). Implements Serializable. save() writes full object graph to data.ser. load() restores singleton from disk. Holds users, courses, news, requests, messages.</div>
+      <div style="margin-top:12px">
+        <div class="code-block">
+          <div class="code-top"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-lang">Java</div></div>
+          <pre><span class="cl">DataStore</span>.getInstance().<span class="fn">save</span>(<span class="st">"data.ser"</span>);
+<span class="cl">DataStore</span> ds = <span class="cl">DataStore</span>.<span class="fn">load</span>(<span class="st">"data.ser"</span>);
+<span class="cm">// Output: Saved successfully / Loaded successfully</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-card pc-factory" id="userfactory">
+      <div class="pattern-icon">◇</div>
+      <div class="pattern-name">UserFactory — Factory</div>
+      <div class="pattern-desc">Static createUser(type, id, username, password, firstName, lastName, gender). Returns Student / Teacher / Manager / Admin. Throws IllegalArgumentException for unknown type.</div>
+      <div style="margin-top:12px">
+        <div class="code-block">
+          <div class="code-top"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-lang">Java</div></div>
+          <pre><span class="cl">User</span> u = <span class="cl">UserFactory</span>.<span class="fn">createUser</span>(
+    <span class="st">"student"</span>, <span class="st">"S99"</span>, <span class="st">"john"</span>, <span class="st">"pass"</span>,
+    <span class="st">"John"</span>, <span class="st">"Doe"</span>, <span class="cl">Gender</span>.MALE
+);
+((<span class="cl">Researcher</span>) u).<span class="fn">addResearchPaper</span>(paper);</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 5 Q480 45 960 15 Q1200 -5 1440 30 L1440 40 L0 40 Z" fill="#2E1206"/>
+</svg>
+
+<!-- ENUMS -->
+<div class="section" id="enums">
+  <div class="section-header">
+    <div class="section-eyebrow">07 — Type System</div>
+    <div class="section-title">Enumerations</div>
+    <div class="section-subtitle">Type-safe domain constants</div>
+  </div>
+
+  <div class="enums-grid">
+    <div class="enum-card">
+      <div class="enum-name">TeacherTitle</div>
+      <div class="enum-pkg">enums.TeacherTitle</div>
+      <div class="enum-values">
+        <div class="enum-val">TUTOR</div>
+        <div class="enum-val">LECTURER</div>
+        <div class="enum-val">SENIOR_LECTURER</div>
+        <div class="enum-val" style="color:var(--accent)">PROFESSOR ← always Researcher</div>
+      </div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">SchoolType</div>
+      <div class="enum-pkg">enums.SchoolType</div>
+      <div class="enum-values">
+        <div class="enum-val">FIT</div><div class="enum-val">BS</div><div class="enum-val">ISE</div><div class="enum-val">SAM</div><div class="enum-val">KMA</div>
+      </div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">ManagerType</div>
+      <div class="enum-pkg">enums.ManagerType</div>
+      <div class="enum-values">
+        <div class="enum-val">OR</div><div class="enum-val">DEPARTMENT</div><div class="enum-val">FACULTY</div>
+      </div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">LessonType</div>
+      <div class="enum-pkg">enums.LessonType</div>
+      <div class="enum-values">
+        <div class="enum-val">LECTURE</div><div class="enum-val">PRACTICE</div>
+      </div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">Gender</div>
+      <div class="enum-pkg">enums.Gender</div>
+      <div class="enum-values">
+        <div class="enum-val">MALE</div><div class="enum-val">FEMALE</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 30 Q360 5 720 28 Q1080 50 1440 20 L1440 40 L0 40 Z" fill="#1C0A02"/>
+</svg>
+
+<!-- EXCEPTIONS -->
+<div class="section" id="exceptions">
+  <div class="section-header">
+    <div class="section-eyebrow">08 — Error Handling</div>
+    <div class="section-title">Custom Exceptions</div>
+    <div class="section-subtitle">Domain-specific checked exceptions for business rule violations</div>
+  </div>
+
+  <div class="exc-grid">
+    <div class="exc-card">
+      <div class="exc-name">InvalidSupervisorException</div>
+      <div class="exc-ext">extends Exception</div>
+      <div class="exc-desc">Thrown when a research supervisor's h-index is less than 3. Only 4th-year students require a supervisor — other years print a message without throwing.</div>
+      <div class="exc-when">⚡ Student.assignResearchSupervisor() · ResearchUtils.assignSupervisor()</div>
+    </div>
+    <div class="exc-card">
+      <div class="exc-name">NonResearcherJoinException</div>
+      <div class="exc-ext">extends Exception</div>
+      <div class="exc-desc">Thrown when an object that doesn't implement Researcher tries to join a ResearchProject. joinProject(Object) checks instanceof at runtime.</div>
+      <div class="exc-when">⚡ ResearchProject.joinProject(Object person)</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<svg class="wave-divider" viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 25 Q360 0 720 30 Q1080 60 1440 20 L1440 50 L0 50 Z" fill="#2E1206"/>
+</svg>
+
+<div class="footer">
+  <div>
+    <div class="footer-text" style="color:var(--muted);font-size:13px;font-family:'Playfair Display',serif;font-weight:600">University Management System</div>
+    <div class="footer-text" style="margin-top:4px">OOP Group G1 · Java SE 21 · 2026 · github.com/kkkhanbin/G1_OOP_Project</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span class="chip" style="color:var(--accent)">◈ Singleton</span>
+    <span class="chip" style="color:var(--l3)">◇ Factory</span>
+    <span class="chip" style="color:#7DC47A">◉ Observer</span>
+    <span class="chip" style="color:#7AB8C4">◫ Strategy</span>
+  </div>
+</div>
+
+</main>
+
+<script>
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('[id]');
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => {
+        n.classList.remove('active');
+        if (n.getAttribute('href') === '#' + e.target.id) n.classList.add('active');
+      });
+    }
+  });
+}, { threshold: 0.15, rootMargin: '-80px 0px -55% 0px' });
+
+sections.forEach(s => obs.observe(s));
+
+function filterNav(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.style.display = !q || item.textContent.toLowerCase().includes(q) ? 'flex' : 'none';
+  });
+}
+</script>
+</body>
+</html>

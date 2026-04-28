@@ -1,6 +1,6 @@
 package courses;
 
-public class Mark {
+public class Mark implements java.io.Serializable {
     private double att1;
     private double att2;
     private double finalExam;

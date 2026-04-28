@@ -2,7 +2,7 @@ package courses;
 
 import enums.LessonType;
 
-public class Lesson {
+public class Lesson implements java.io.Serializable {
     private LessonType type;
     private String topic;
     private int week;

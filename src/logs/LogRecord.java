@@ -2,7 +2,7 @@ package logs;
 
 import java.time.LocalDateTime;
 
-public class LogRecord {
+public class LogRecord implements java.io.Serializable {
     private String action;
     private LocalDateTime timestamp;
 

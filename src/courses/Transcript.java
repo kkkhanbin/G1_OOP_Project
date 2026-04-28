@@ -3,7 +3,7 @@ package courses;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Transcript {
+public class Transcript implements java.io.Serializable {
     private Map<Course, Mark> courseMarks;
 
     public Transcript() {

@@ -1,36 +1,30 @@
 package management;
 
-import users.Employee;
 import java.time.LocalDateTime;
+import users.User;
 
 public class Message {
-    private Employee sender;
-    private Employee receiver;
+    // ИСПРАВЛЕНО: было Employee — теперь User,
+    // чтобы студенты тоже могли отправлять сообщения
+    private User sender;
+    private User receiver;
     private String text;
     private LocalDateTime sentAt;
 
-    public Message(Employee sender, Employee receiver, String text) {
+    public Message(User sender, User receiver, String text) {
         this.sender = sender;
         this.receiver = receiver;
         this.text = text;
         this.sentAt = LocalDateTime.now();
     }
 
-    public Employee getSender() {
-        return sender;
-    }
+    public User getSender() { return sender; }
 
-    public Employee getReceiver() {
-        return receiver;
-    }
+    public User getReceiver() { return receiver; }
 
-    public String getText() {
-        return text;
-    }
+    public String getText() { return text; }
 
-    public LocalDateTime getSentAt() {
-        return sentAt;
-    }
+    public LocalDateTime getSentAt() { return sentAt; }
 
     @Override
     public String toString() {
