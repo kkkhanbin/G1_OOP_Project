@@ -9,9 +9,17 @@ import java.util.List;
 public class DataStore implements Serializable {
     private static DataStore instance;
     private List<User> users;
+    private List<courses.Course> courses;
+    private List<management.News> news;
+    private List<management.Request> requests;
+    private List<management.Message> messages;
 
     private DataStore() {
         users = new ArrayList<>();
+        courses = new ArrayList<>();
+        news = new ArrayList<>();
+        requests = new ArrayList<>();
+        messages = new ArrayList<>();
     }
 
     public static DataStore getInstance() {
@@ -27,6 +35,38 @@ public class DataStore implements Serializable {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public List<courses.Course> getCourses() {
+        return courses;
+    }
+
+    public List<management.News> getNews() {
+        return news;
+    }
+
+    public List<management.Request> getRequests() {
+        return requests;
+    }
+
+    public List<management.Message> getMessages() {
+        return messages;
+    }
+
+    public void addCourse(courses.Course course) {
+        courses.add(course);
+    }
+
+    public void addNews(management.News newsItem) {
+        news.add(newsItem);
+    }
+
+    public void addRequest(management.Request request) {
+        requests.add(request);
+    }
+
+    public void addMessage(management.Message message) {
+        messages.add(message);
     }
 
     public void save(String filename) {

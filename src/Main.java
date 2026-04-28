@@ -336,7 +336,7 @@ public class Main {
             System.out.println("Login failed");
         }
 
-        User factoryUser = UserFactory.createUser(
+        Student factoryUser = UserFactory.createUser(
                 "student",
                 "S100",
                 "newuser",
@@ -345,6 +345,8 @@ public class Main {
                 "User",
                 Gender.MALE
         );
+
+        factoryUser.addResearchPaper();
 
         System.out.println("Created via factory:");
         System.out.println(factoryUser);

@@ -23,7 +23,7 @@ public class UserFactory {
 
             case "teacher":
                 return new Teacher(id, username, password, firstName, lastName, gender,
-                        500000, "FIT", SchoolType.FIT, TeacherTitle.LECTURER);
+                        1_500_000, "FIT", SchoolType.FIT, TeacherTitle.LECTURER);
 
             case "manager":
                 return new Manager(id, username, password, firstName, lastName, gender,
