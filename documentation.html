@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>University Management System — Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --d1: #1C0A02; --d2: #2E1206; --d3: #3D1A08; --d4: #5C2810;
+  --m1: #7A3818; --m2: #9B4E22; --l1: #B8692E; --l2: #C97D3E;
+  --l3: #D9944E; --accent: #E8A85E; --gold: #F2C06E;
+  --cream: #FAF0E6; --white: #FFFFFF; --text: #F5E6D3;
+  --muted: #C4A882; --sidebar-w: 270px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--d1);color:var(--text);display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--d2);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column;border-right:1px solid var(--d4)}
+.sidebar-wave{width:100%;height:120px;background:var(--d3);position:relative;overflow:hidden;flex-shrink:0}
+.sidebar-wave svg{position:absolute;bottom:0;width:100%}
+.sidebar-logo{padding:14px 18px 0;position:relative;z-index:2}
+.logo-tag{font-size:9px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:5px}
+.logo-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--white);line-height:1.4}
+.search-wrap{padding:12px 14px;border-bottom:1px solid var(--d4);position:relative}
+.search-wrap input{width:100%;background:var(--d3);border:1px solid var(--d4);border-radius:6px;padding:7px 10px 7px 28px;color:var(--text);font-family:'Inter',sans-serif;font-size:11px;outline:none}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap input::placeholder{color:var(--muted)}
+.search-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px}
+.nav-group{padding:10px 0 6px;border-bottom:1px solid var(--d3)}
+.nav-group-title{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:0 18px 6px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6px 18px;color:var(--muted);font-size:12.5px;font-weight:400;cursor:pointer;text-decoration:none;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{color:var(--cream);background:rgba(232,168,94,.07)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(232,168,94,.1);font-weight:500}
+.nav-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dot-a{background:var(--accent)}.dot-g{background:#7DC47A}.dot-m{background:var(--l2)}.dot-s{background:#7AB8C4}
+.tag-new-inline{display:inline-block;font-size:8px;padding:1px 5px;border-radius:3px;background:var(--l1);color:var(--white);font-weight:700;margin-left:4px;vertical-align:middle}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;overflow-x:hidden}
+
+/* HERO */
+.hero{position:relative;min-height:420px;background:var(--d3);overflow:hidden;display:flex;align-items:center;padding:60px 60px 100px}
+.hero-bg-wave{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.wave-layer{position:absolute;bottom:-2px;left:0;width:100%;pointer-events:none}
+.hero-content{position:relative;z-index:5;max-width:620px}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(232,168,94,.15);border:1px solid rgba(232,168,94,.3);border-radius:20px;padding:5px 14px;font-size:10px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:22px;font-weight:600}
+.hero h1{font-family:'Playfair Display',serif;font-size:54px;font-weight:800;line-height:1.1;color:var(--white);margin-bottom:8px}
+.hero h1 span{color:var(--accent)}
+.hero-sub{font-family:'Playfair Display',serif;font-size:20px;font-weight:400;color:var(--l3);margin-bottom:18px;font-style:italic}
+.hero p{font-size:14px;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:36px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(232,168,94,.2);border-radius:10px;padding:14px 20px;text-align:center;min-width:80px}
+.stat-num{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:var(--accent);line-height:1;margin-bottom:4px}
+.stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:500}
+
+/* SECTIONS */
+.section{padding:48px 60px;position:relative}
+.section:nth-child(even){background:var(--d2)}
+.section:nth-child(odd){background:var(--d1)}
+.wave-divider{width:100%;display:block;line-height:0}
+.section-header{margin-bottom:28px}
+.section-eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px}
+.section-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:var(--white);line-height:1.2;margin-bottom:6px}
+.section-subtitle{font-size:13px;color:var(--muted);font-weight:400}
+
+/* PATTERN CARDS */
+.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.pattern-card{background:var(--d3);border-radius:14px;padding:24px;border:1px solid var(--d4);position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.pattern-card:hover{border-color:var(--l1);transform:translateY(-2px)}
+.pattern-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.pc-singleton::before{background:linear-gradient(90deg,var(--accent),var(--l1))}
+.pc-factory::before{background:linear-gradient(90deg,var(--l3),var(--l2))}
+.pc-observer::before{background:linear-gradient(90deg,#7DC47A,#4A9B47)}
+.pc-strategy::before{background:linear-gradient(90deg,#7AB8C4,#4A8B9B)}
+.pattern-icon{font-size:22px;margin-bottom:10px}
+.pattern-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:7px}
+.pattern-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.pattern-chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:9.5px;padding:3px 8px;border-radius:4px;background:var(--d4);border:1px solid var(--m1);color:var(--muted);font-family:'Inter',monospace}
+
+/* CLASS CARDS */
+.class-card{background:var(--d3);border:1px solid var(--d4);border-radius:14px;overflow:hidden;margin-bottom:16px;transition:border-color .2s}
+.class-card:hover{border-color:var(--l1)}
+.cc-head{padding:16px 22px;border-bottom:1px solid var(--d4);display:flex;align-items:flex-start;justify-content:space-between;gap:16px;background:linear-gradient(135deg,var(--d3),var(--d4))}
+.cc-type-badge{font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:3px 9px;border-radius:4px;margin-bottom:6px;display:inline-block}
+.badge-abstract{background:rgba(185,105,46,.25);color:var(--l3);border:1px solid var(--l1)}
+.badge-interface{background:rgba(125,196,122,.15);color:#7DC47A;border:1px solid #4A9B47}
+.badge-class{background:rgba(232,168,94,.15);color:var(--accent);border:1px solid var(--l2)}
+.badge-new{background:rgba(232,148,78,.2);color:var(--gold);border:1px solid var(--l1)}
+.badge-enum{background:rgba(122,184,196,.15);color:#7AB8C4;border:1px solid #4A8B9B}
+.cc-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px}
+.cc-extends{font-family:'Inter',monospace;font-size:11px;color:var(--muted)}
+.cc-extends em{color:var(--l3);font-style:normal}
+.cc-desc{font-size:12px;color:var(--muted);line-height:1.5;max-width:460px;margin-top:6px}
+.cc-pkg{font-family:'Inter',monospace;font-size:9.5px;color:var(--muted);background:var(--d4);padding:4px 10px;border-radius:5px;white-space:nowrap;border:1px solid var(--m1)}
+.cc-body{display:grid;grid-template-columns:1fr 1fr}
+.cc-section{padding:16px 22px}
+.cc-section:first-child{border-right:1px solid var(--d4)}
+.cc-section-title{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:600}
+.field-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-family:'Inter',monospace;font-size:10px}
+.field-row:last-child{border-bottom:none}
+.f-type{color:var(--l3);min-width:80px;flex-shrink:0}
+.f-name{color:var(--accent);flex:1}
+.f-note{font-size:9px;color:var(--muted)}
+.method-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-family:'Inter',monospace;font-size:10px}
+.method-row:last-child{border-bottom:none}
+.m-sig{color:var(--white);margin-bottom:2px}
+.m-ret{color:#7DC47A}.m-name{color:var(--l3)}.m-param{color:var(--l2)}
+.m-note{font-size:9px;color:var(--muted);font-family:'Inter',sans-serif;line-height:1.4}
+
+/* CODE BLOCK */
+.code-block{background:var(--d1);border:1px solid var(--d4);border-radius:10px;overflow:hidden;margin:12px 0}
+.code-top{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--d2);border-bottom:1px solid var(--d4)}
+.code-dots{display:flex;gap:5px}
+.code-dot{width:9px;height:9px;border-radius:50%}
+.code-dot:nth-child(1){background:#FF5F57}.code-dot:nth-child(2){background:#FEBC2E}.code-dot:nth-child(3){background:#28C840}
+.code-lang{font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;font-weight:600}
+.code-block pre{padding:14px;font-family:'Inter',monospace;font-size:11px;line-height:1.8;color:var(--text);overflow-x:auto}
+.kw{color:#D4A5FF}.cl{color:#85C1E9}.fn{color:var(--l3)}.st{color:#ABEBC6}.cm{color:var(--muted);font-style:italic}.nm{color:var(--accent)}
+
+/* ENUMS */
+.enums-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.enum-card{background:var(--d3);border:1px solid var(--d4);border-radius:10px;padding:16px;transition:border-color .2s}
+.enum-card:hover{border-color:var(--l1)}
+.enum-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.enum-pkg{font-family:'Inter',monospace;font-size:9px;color:var(--muted);margin-bottom:10px}
+.enum-val{font-family:'Inter',monospace;font-size:10px;color:var(--text);padding:3px 8px;margin-bottom:3px;background:rgba(232,168,94,.07);border-left:2px solid var(--l1);border-radius:2px}
+
+/* EXCEPTIONS */
+.exc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.exc-card{background:var(--d3);border:1px solid rgba(184,105,46,.4);border-radius:12px;padding:20px}
+.exc-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--l3);margin-bottom:5px}
+.exc-ext{font-family:'Inter',monospace;font-size:9.5px;color:var(--muted);margin-bottom:10px}
+.exc-desc{font-size:12px;color:var(--muted);line-height:1.55}
+.exc-when{margin-top:10px;font-family:'Inter',monospace;font-size:9.5px;color:var(--accent)}
+
+/* HIERARCHY */
+.hd-node{display:flex;flex-direction:column;align-items:center;background:var(--d4);border:1px solid var(--m1);border-radius:10px;padding:10px 18px;text-align:center;min-width:100px}
+.hd-node .nt{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.hd-node .nn{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--white)}
+.hd-node-abs{border-color:var(--l1)!important;border-width:2px!important}
+.hd-node-abs .nn{color:var(--l3)}
+.hd-node-new{border-color:var(--accent)!important;border-width:2px!important;background:linear-gradient(135deg,var(--d3),var(--d4))!important}
+.hd-node-new .nn{color:var(--accent)}
+.ifc-box{flex:1;min-width:220px;border-radius:12px;padding:16px 18px}
+.ifc-box .it{font-size:8.5px;letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:5px}
+.ifc-box .in{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:10px}
+.ifc-box .im{font-family:'Inter',monospace;font-size:10px;color:var(--muted);padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.ifc-box .im:last-child{border-bottom:none}
+.ifc-impl{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.ifc-tag{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:500}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--d2)}
+::-webkit-scrollbar-thumb{background:var(--d4);border-radius:3px}
+
+/* FOOTER */
+.footer{padding:32px 60px;background:var(--d2);border-top:1px solid var(--d4);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.footer-text{font-family:'Inter',monospace;font-size:10px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-wave">
+    <div class="sidebar-logo">
+      <div class="logo-tag">◆ Docs v1.0</div>
+      <div class="logo-title">University Management System</div>
+    </div>
+    <svg viewBox="0 0 270 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 30 Q67 10 135 28 Q202 46 270 20 L270 50 L0 50 Z" fill="#1C0A02" opacity="0.7"/>
+      <path d="M0 40 Q90 20 180 38 Q225 46 270 32 L270 50 L0 50 Z" fill="#1C0A02"/>
+    </svg>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" placeholder="Search classes..." id="searchInput" oninput="filterNav(this.value)">
+  </div>
+  <nav id="navContent">
+    <div class="nav-group">
+      <div class="nav-group-title">Overview</div>
+      <a class="nav-item active" href="#overview"><span class="nav-dot dot-a"></span>Project Overview</a>
+      <a class="nav-item" href="#patterns"><span class="nav-dot dot-a"></span>Design Patterns</a>
+      <a class="nav-item" href="#hierarchy"><span class="nav-dot dot-a"></span>Class Hierarchy</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">users package</div>
+      <a class="nav-item" href="#user"><span class="nav-dot dot-m"></span>User</a>
+      <a class="nav-item" href="#employee"><span class="nav-dot dot-m"></span>Employee</a>
+      <a class="nav-item" href="#student"><span class="nav-dot dot-m"></span>Student</a>
+      <a class="nav-item" href="#teacher"><span class="nav-dot dot-m"></span>Teacher</a>
+      <a class="nav-item" href="#manager"><span class="nav-dot dot-m"></span>Manager</a>
+      <a class="nav-item" href="#admin"><span class="nav-dot dot-m"></span>Admin</a>
+      <a class="nav-item" href="#researcheremployee"><span class="nav-dot dot-a"></span>ResearcherEmployee <span class="tag-new-inline">NEW</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">courses package</div>
+      <a class="nav-item" href="#course"><span class="nav-dot dot-m"></span>Course</a>
+      <a class="nav-item" href="#mark"><span class="nav-dot dot-m"></span>Mark</a>
+      <a class="nav-item" href="#lesson"><span class="nav-dot dot-m"></span>Lesson</a>
+      <a class="nav-item" href="#transcript"><span class="nav-dot dot-m"></span>Transcript</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">research package</div>
+      <a class="nav-item" href="#researcher"><span class="nav-dot dot-g"></span>Researcher</a>
+      <a class="nav-item" href="#researchpaper"><span class="nav-dot dot-m"></span>ResearchPaper</a>
+      <a class="nav-item" href="#researchproject"><span class="nav-dot dot-m"></span>ResearchProject</a>
+      <a class="nav-item" href="#researchutils"><span class="nav-dot dot-m"></span>ResearchUtils</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">management</div>
+      <a class="nav-item" href="#adminservice"><span class="nav-dot dot-m"></span>AdminService</a>
+      <a class="nav-item" href="#managerservice"><span class="nav-dot dot-m"></span>ManagerService</a>
+      <a class="nav-item" href="#news"><span class="nav-dot dot-a"></span>News (Subject)</a>
+      <a class="nav-item" href="#observer"><span class="nav-dot dot-g"></span>Observer</a>
+      <a class="nav-item" href="#request"><span class="nav-dot dot-m"></span>Request</a>
+      <a class="nav-item" href="#message"><span class="nav-dot dot-m"></span>Message</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">System</div>
+      <a class="nav-item" href="#datastore"><span class="nav-dot dot-a"></span>DataStore</a>
+      <a class="nav-item" href="#authservice"><span class="nav-dot dot-m"></span>AuthService</a>
+      <a class="nav-item" href="#userfactory"><span class="nav-dot dot-a"></span>UserFactory</a>
+      <a class="nav-item" href="#comparators"><span class="nav-dot dot-s"></span>Comparators</a>
+      <a class="nav-item" href="#exceptions"><span class="nav-dot dot-a"></span>Exceptions</a>
+      <a class="nav-item" href="#enums"><span class="nav-dot dot-s"></span>Enumerations</a>
+    </div>
+  </nav>
+</aside>
+
+<main class="main">
+
+<!-- HERO -->
+<div class="hero" id="overview">
+  <div class="hero-bg-wave">
+    <svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
+      <path d="M0 180 Q200 80 400 160 Q600 240 800 120 Q1000 20 1200 100 L1200 420 L0 420 Z" fill="#2E1206" opacity="0.7"/>
+      <path d="M0 240 Q150 160 350 220 Q550 280 750 190 Q950 100 1200 160 L1200 420 L0 420 Z" fill="#3D1A08" opacity="0.8"/>
+      <path d="M0 300 Q250 240 450 290 Q650 340 850 260 Q1050 180 1200 230 L1200 420 L0 420 Z" fill="#2E1206" opacity="0.6"/>
+    </svg>
+  </div>
+  <svg class="wave-layer" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 40 Q360 0 720 40 Q1080 80 1440 40 L1440 80 L0 80 Z" fill="#1C0A02"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-tag">◆ OOP Group G1 · Java SE 21 · 2026</div>
+    <h1>University<br><span>Management</span><br>System</h1>
+    <div class="hero-sub">Research-Oriented University Information System</div>
+    <p>Console-based Java application implementing academic management, research tracking, user authentication, and data persistence using four industry-standard design patterns.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">38</div><div class="stat-label">Java Files</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Patterns</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Classes</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Enums</div></div>
+      <div class="stat"><div class="stat-num">22</div><div class="stat-label">Requirements</div></div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q360 60 720 30 Q1080 0 1440 20 L1440 40 L0 40 Z" fill="#2E1206"/></svg>
+
+<!-- ═══ DESIGN PATTERNS ═══ -->
+<div class="section" id="patterns">
+  <div class="section-header">
+    <div class="section-eyebrow">01 — Architecture</div>
+    <div class="section-title">Design Patterns</div>
+    <div class="section-subtitle">Four industry-standard patterns implemented throughout the system</div>
+  </div>
+  <div class="pattern-grid">
+    <div class="pattern-card pc-singleton">
+      <div class="pattern-icon">◈</div>
+      <div class="pattern-name">Singleton</div>
+      <div class="pattern-desc">One DataStore instance only. Private constructor. getInstance() creates lazily. Full serialization — save to disk, load back.</div>
+      <div class="pattern-chips"><span class="chip">DataStore</span><span class="chip">getInstance()</span><span class="chip">save()</span><span class="chip">load()</span></div>
+    </div>
+    <div class="pattern-card pc-factory">
+      <div class="pattern-icon">◇</div>
+      <div class="pattern-name">Factory</div>
+      <div class="pattern-desc">UserFactory.createUser(type,...) returns the correct subclass by type string. Throws IllegalArgumentException for unknown types.</div>
+      <div class="pattern-chips"><span class="chip">UserFactory</span><span class="chip">createUser()</span><span class="chip">Student</span><span class="chip">Teacher</span></div>
+    </div>
+    <div class="pattern-card pc-observer">
+      <div class="pattern-icon">◉</div>
+      <div class="pattern-name">Observer</div>
+      <div class="pattern-desc">News is Subject — holds List&lt;Observer&gt;. NewsSubscriber implements Observer.update(). publishNews() fires notifyObservers().</div>
+      <div class="pattern-chips"><span class="chip">News</span><span class="chip">Observer</span><span class="chip">NewsSubscriber</span><span class="chip">notifyObservers()</span></div>
+    </div>
+    <div class="pattern-card pc-strategy">
+      <div class="pattern-icon">◫</div>
+      <div class="pattern-name">Strategy</div>
+      <div class="pattern-desc">printPapers(Comparator c) accepts any comparator at runtime. 5 interchangeable strategies: citations, date, pages, GPA, name.</div>
+      <div class="pattern-chips"><span class="chip">PaperByCitations</span><span class="chip">PaperByDate</span><span class="chip">PaperByPages</span><span class="chip">StudentGpa</span></div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 30 Q480 5 960 30 Q1200 45 1440 15 L1440 40 L0 40 Z" fill="#1C0A02"/></svg>
+
+<!-- ═══ CLASS HIERARCHY ═══ -->
+<div class="section" id="hierarchy">
+  <div class="section-header">
+    <div class="section-eyebrow">02 — Structure</div>
+    <div class="section-title">Class Hierarchy</div>
+    <div class="section-subtitle">Inheritance tree and interface implementations</div>
+  </div>
+
+  <div style="display:flex;gap:20px;margin-bottom:20px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:8px">
+      <svg width="40" height="12"><line x1="0" y1="6" x2="32" y2="6" stroke="#D9944E" stroke-width="2"/><polygon points="32,2 40,6 32,10" fill="#D9944E"/></svg>
+      <span style="font-size:10px;color:#D9944E;font-weight:600">extends</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <svg width="40" height="12"><line x1="0" y1="6" x2="32" y2="6" stroke="#7DC47A" stroke-width="2" stroke-dasharray="4,3"/><polygon points="32,2 40,6 32,10" fill="#7DC47A"/></svg>
+      <span style="font-size:10px;color:#7DC47A;font-weight:600">implements</span>
+    </div>
+  </div>
+
+  <svg viewBox="0 0 860 410" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;overflow:visible">
+    <defs>
+      <marker id="arr-ext" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 2L9 5L1 8" fill="none" stroke="#D9944E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+      <marker id="arr-impl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 2L9 5L1 8" fill="none" stroke="#7DC47A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    </defs>
+    <rect x="310" y="8" width="240" height="72" rx="10" fill="#5C2810" stroke="#B8692E" stroke-width="2"/>
+    <text x="430" y="27" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="8" letter-spacing="2" font-weight="600">ABSTRACT CLASS</text>
+    <text x="430" y="52" text-anchor="middle" fill="#D9944E" font-family="Georgia,serif" font-size="20" font-weight="700">User</text>
+    <text x="430" y="70" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="9">Serializable · Comparable&lt;User&gt;</text>
+    <line x1="430" y1="80" x2="430" y2="118" stroke="#D9944E" stroke-width="2" opacity="0.55"/>
+    <line x1="200" y1="118" x2="660" y2="118" stroke="#D9944E" stroke-width="2" opacity="0.4"/>
+    <line x1="200" y1="118" x2="200" y2="155" stroke="#D9944E" stroke-width="2" opacity="0.55" marker-end="url(#arr-ext)"/>
+    <rect x="164" y="127" width="52" height="15" rx="3" fill="#3D1A08" stroke="#D9944E" stroke-width="0.8" opacity="0.9"/>
+    <text x="190" y="139" text-anchor="middle" fill="#D9944E" font-family="Inter,sans-serif" font-size="8.5" font-weight="600">extends</text>
+    <line x1="660" y1="118" x2="660" y2="155" stroke="#D9944E" stroke-width="2" opacity="0.55" marker-end="url(#arr-ext)"/>
+    <rect x="624" y="127" width="52" height="15" rx="3" fill="#3D1A08" stroke="#D9944E" stroke-width="0.8" opacity="0.9"/>
+    <text x="650" y="139" text-anchor="middle" fill="#D9944E" font-family="Inter,sans-serif" font-size="8.5" font-weight="600">extends</text>
+    <rect x="120" y="155" width="160" height="54" rx="10" fill="#5C2810" stroke="#7A3818" stroke-width="1.5"/>
+    <text x="200" y="174" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="8" letter-spacing="1.5" font-weight="600">CLASS</text>
+    <text x="200" y="197" text-anchor="middle" fill="#FFFFFF" font-family="Georgia,serif" font-size="17" font-weight="700">Employee</text>
+    <rect x="570" y="155" width="185" height="70" rx="10" fill="#5C2810" stroke="#7A3818" stroke-width="1.5"/>
+    <text x="662" y="174" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="8" letter-spacing="1.5" font-weight="600">CLASS</text>
+    <text x="662" y="197" text-anchor="middle" fill="#FFFFFF" font-family="Georgia,serif" font-size="17" font-weight="700">Student</text>
+    <line x1="592" y1="214" x2="610" y2="214" stroke="#7DC47A" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr-impl)"/>
+    <text x="616" y="218" fill="#7DC47A" font-family="Inter,sans-serif" font-size="8.5" font-style="italic">implements Researcher</text>
+    <line x1="200" y1="209" x2="200" y2="258" stroke="#D9944E" stroke-width="2" opacity="0.5"/>
+    <rect x="204" y="226" width="52" height="15" rx="3" fill="#3D1A08" stroke="#D9944E" stroke-width="0.8" opacity="0.9"/>
+    <text x="230" y="238" text-anchor="middle" fill="#D9944E" font-family="Inter,sans-serif" font-size="8.5" font-weight="600">extends</text>
+    <line x1="50" y1="258" x2="560" y2="258" stroke="#D9944E" stroke-width="2" opacity="0.35"/>
+    <line x1="50" y1="258" x2="50" y2="298" stroke="#D9944E" stroke-width="1.5" opacity="0.55" marker-end="url(#arr-ext)"/>
+    <line x1="185" y1="258" x2="185" y2="298" stroke="#D9944E" stroke-width="1.5" opacity="0.55" marker-end="url(#arr-ext)"/>
+    <line x1="335" y1="258" x2="335" y2="298" stroke="#D9944E" stroke-width="1.5" opacity="0.55" marker-end="url(#arr-ext)"/>
+    <line x1="560" y1="258" x2="560" y2="288" stroke="#D9944E" stroke-width="1.5" opacity="0.55" marker-end="url(#arr-ext)"/>
+    <rect x="0" y="298" width="105" height="54" rx="10" fill="#5C2810" stroke="#7A3818" stroke-width="1.5"/>
+    <text x="52" y="316" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="7.5" letter-spacing="1.5" font-weight="600">CLASS</text>
+    <text x="52" y="339" text-anchor="middle" fill="#FFFFFF" font-family="Georgia,serif" font-size="15" font-weight="700">Manager</text>
+    <rect x="130" y="298" width="105" height="54" rx="10" fill="#5C2810" stroke="#7A3818" stroke-width="1.5"/>
+    <text x="182" y="316" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="7.5" letter-spacing="1.5" font-weight="600">CLASS</text>
+    <text x="182" y="339" text-anchor="middle" fill="#FFFFFF" font-family="Georgia,serif" font-size="15" font-weight="700">Admin</text>
+    <rect x="265" y="298" width="145" height="78" rx="10" fill="#5C2810" stroke="#7A3818" stroke-width="1.5"/>
+    <text x="337" y="316" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="7.5" letter-spacing="1.5" font-weight="600">CLASS</text>
+    <text x="337" y="338" text-anchor="middle" fill="#FFFFFF" font-family="Georgia,serif" font-size="15" font-weight="700">Teacher</text>
+    <line x1="277" y1="353" x2="295" y2="353" stroke="#7DC47A" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr-impl)"/>
+    <text x="300" y="357" fill="#7DC47A" font-family="Inter,sans-serif" font-size="8" font-style="italic">implements Researcher</text>
+    <text x="337" y="370" text-anchor="middle" fill="#E8A85E" font-family="Inter,sans-serif" font-size="8">PROFESSOR → always researcher</text>
+    <rect x="511" y="275" width="50" height="14" rx="3" fill="#B8692E"/>
+    <text x="536" y="286" text-anchor="middle" fill="#FFFFFF" font-family="Inter,sans-serif" font-size="8" font-weight="700">★ NEW</text>
+    <rect x="435" y="288" width="205" height="88" rx="10" fill="#4A1E08" stroke="#E8A85E" stroke-width="2"/>
+    <text x="537" y="308" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="7.5" letter-spacing="1.5" font-weight="600">CLASS</text>
+    <text x="537" y="330" text-anchor="middle" fill="#E8A85E" font-family="Georgia,serif" font-size="14" font-weight="700">ResearcherEmployee</text>
+    <line x1="447" y1="346" x2="465" y2="346" stroke="#7DC47A" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr-impl)"/>
+    <text x="470" y="350" fill="#7DC47A" font-family="Inter,sans-serif" font-size="8" font-style="italic">implements Researcher</text>
+    <text x="537" y="367" text-anchor="middle" fill="#C4A882" font-family="Inter,sans-serif" font-size="8">not Teacher, not Student</text>
+  </svg>
+
+  <div style="margin:28px 0 20px;border-top:1px dashed var(--d4)"></div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <div class="ifc-box" style="background:rgba(125,196,122,.06);border:1px solid rgba(125,196,122,.25)">
+      <div class="it" style="color:#7DC47A">«interface»</div>
+      <div class="in" style="color:#7DC47A">Researcher</div>
+      <div class="im">getHIndex() / setHIndex(int)</div>
+      <div class="im">addResearchPaper(ResearchPaper p)</div>
+      <div class="im" style="color:var(--accent)">printPapers(Comparator c) ← Strategy</div>
+      <div class="im">getResearcherName()</div>
+      <div class="ifc-impl">
+        <span class="ifc-tag" style="background:rgba(125,196,122,.1);color:#7DC47A;border:1px solid rgba(125,196,122,.2)">Student</span>
+        <span class="ifc-tag" style="background:rgba(125,196,122,.1);color:#7DC47A;border:1px solid rgba(125,196,122,.2)">Teacher</span>
+        <span class="ifc-tag" style="background:rgba(232,168,94,.12);color:var(--accent);border:1px solid rgba(232,168,94,.25)">ResearcherEmployee ★</span>
+      </div>
+    </div>
+    <div class="ifc-box" style="background:rgba(122,184,196,.06);border:1px solid rgba(122,184,196,.25)">
+      <div class="it" style="color:#7AB8C4">«interface»</div>
+      <div class="in" style="color:#7AB8C4">Observer</div>
+      <div class="im">update(News news)</div>
+      <div class="ifc-impl"><span class="ifc-tag" style="background:rgba(122,184,196,.1);color:#7AB8C4;border:1px solid rgba(122,184,196,.2)">NewsSubscriber</span></div>
+    </div>
+    <div class="ifc-box" style="background:rgba(232,168,94,.06);border:1px solid rgba(232,168,94,.25)">
+      <div class="it" style="color:var(--accent)">«subject» Observer Pattern</div>
+      <div class="in" style="color:var(--accent)">News</div>
+      <div class="im">attach(Observer o)</div>
+      <div class="im">detach(Observer o)</div>
+      <div class="im" style="color:var(--l3)">notifyObservers()</div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q360 50 720 20 Q1080 -10 1440 30 L1440 40 L0 40 Z" fill="#2E1206"/></svg>
+
+<!-- ═══ USERS PACKAGE ═══ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">03 — users package</div>
+    <div class="section-title">User Hierarchy</div>
+    <div class="section-subtitle">Abstract base class through concrete implementations</div>
+  </div>
+
+  <!-- USER -->
+  <div class="class-card" id="user">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-abstract">abstract class</div><div class="cc-name">User</div><div class="cc-extends">implements <em>Serializable</em>, <em>Comparable&lt;User&gt;</em></div><div class="cc-desc">Base class for all system participants. Provides core identity, credentials, and natural ordering by id.</div></div>
+      <div class="cc-pkg">users.User</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">id</span><span class="f-note">Unique identifier</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">username</span><span class="f-note">Login name</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">password</span><span class="f-note">Auth credential</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">firstName / lastName</span></div>
+        <div class="field-row"><span class="f-type">Gender</span><span class="f-name">gender</span><span class="f-note">MALE / FEMALE</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getFullName</span>()</div><div class="m-note">firstName + " " + lastName</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">int</span> <span class="m-name">compareTo</span>(<span class="m-param">User other</span>)</div><div class="m-note">Natural order by id</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">boolean</span> <span class="m-name">equals</span>(<span class="m-param">Object o</span>)</div><div class="m-note">Equality by id only</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">int</span> <span class="m-name">hashCode</span>()</div><div class="m-note">Hash by id — critical for HashMap&lt;Student,Mark&gt;</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPLOYEE -->
+  <div class="class-card" id="employee">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Employee</div><div class="cc-extends">extends <em>User</em></div><div class="cc-desc">Intermediate class for all university staff. Adds salary, department, and school. Never instantiated directly.</div></div>
+      <div class="cc-pkg">users.Employee</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">salary</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">department</span><span class="f-note">e.g. "FIT"</span></div>
+        <div class="field-row"><span class="f-type">SchoolType</span><span class="f-name">school</span><span class="f-note">FIT/BS/ISE/SAM/KMA</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Subclasses</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Teacher</div><div class="m-note">Instructor — implements Researcher</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Manager</div><div class="m-note">Academic manager with ManagerType</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Admin</div><div class="m-note">System administrator</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--gold)">ResearcherEmployee ★</div><div class="m-note">Pure researcher role</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDENT -->
+  <div class="class-card" id="student">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Student</div><div class="cc-extends">extends <em>User</em> implements <em>Researcher</em></div><div class="cc-desc">Bachelor student. 21-credit limit, fail limit max 3. 4th-year need supervisor with h-index ≥ 3.</div></div>
+      <div class="cc-pkg">users.Student</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">major</span><span class="f-note">"CS", "IS" etc.</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">yearOfStudy</span><span class="f-note">1–4</span></div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">gpa</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">registeredCredits</span><span class="f-note">Max 21</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">failedCoursesCount</span><span class="f-note">Max 3</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Course&gt;</span><span class="f-name">registeredCourses</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">boolean</span> <span class="m-name">canRegister</span>(<span class="m-param">int credits</span>)</div><div class="m-note">registeredCredits + newCredits ≤ 21</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addCredits</span>(<span class="m-param">int n</span>)</div><div class="m-note">Called by Course after registration</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">viewCourses</span>()</div><div class="m-note">Prints all registered courses</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">viewMarks</span>()</div><div class="m-note">Prints marks from all courses</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">rateTeacher</span>(<span class="m-param">Teacher t, int r</span>)</div><div class="m-note">Rating 1–5</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">assignResearchSupervisor</span>(<span class="m-param">Researcher r</span>)</div><div class="m-note">Year-4 only; throws if h-index &lt; 3</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACHER -->
+  <div class="class-card" id="teacher">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Teacher</div><div class="cc-extends">extends <em>Employee</em> implements <em>Researcher</em></div><div class="cc-desc">PROFESSOR always activeResearcher=true. Non-professors opt-in via becomeResearcher(). Tracks courses and ratings.</div></div>
+      <div class="cc-pkg">users.Teacher</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">TeacherTitle</span><span class="f-name">title</span><span class="f-note">TUTOR/LECTURER/SENIOR_LECTURER/PROFESSOR</span></div>
+        <div class="field-row"><span class="f-type">boolean</span><span class="f-name">activeResearcher</span><span class="f-note">Auto-true for PROFESSOR</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Course&gt;</span><span class="f-name">courses</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Integer&gt;</span><span class="f-name">ratings</span><span class="f-note">Student ratings 1–5</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">hIndex</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">setTitle</span>(<span class="m-param">TeacherTitle t</span>)</div><div class="m-note">PROFESSOR → auto activeResearcher=true</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">becomeResearcher</span>()</div><div class="m-note">Non-professors opt-in</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">putMark</span>(<span class="m-param">Course c, Student s, Mark m</span>)</div><div class="m-note">Teacher grades student</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">viewStudents</span>(<span class="m-param">Course c</span>)</div><div class="m-note">Lists students with GPA and marks</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">double</span> <span class="m-name">getAverageRating</span>()</div><div class="m-note">Average of all student ratings</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGER -->
+  <div class="class-card" id="manager">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Manager</div><div class="cc-extends">extends <em>Employee</em></div><div class="cc-desc">Academic manager. Type defines scope: OR = registrar, DEPARTMENT = department, FACULTY = faculty.</div></div>
+      <div class="cc-pkg">users.Manager</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">ManagerType</span><span class="f-name">managerType</span><span class="f-note">OR / DEPARTMENT / FACULTY</span></div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">salary</span><span class="f-note">from Employee</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">department</span><span class="f-note">from Employee</span></div>
+        <div class="field-row"><span class="f-type">SchoolType</span><span class="f-name">school</span><span class="f-note">from Employee</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Used In</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">ManagerService</div><div class="m-note">All management operations via ManagerService(manager)</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Request.sender</div><div class="m-note">Can submit and approve/reject requests</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Message.sender</div><div class="m-note">Can send messages to any User</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">News.publisher</div><div class="m-note">Publishes news via publishNews()</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="class-card" id="admin">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Admin</div><div class="cc-extends">extends <em>Employee</em></div><div class="cc-desc">System administrator. Full user management capabilities via AdminService. Access to all system logs.</div></div>
+      <div class="cc-pkg">users.Admin</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">salary</span><span class="f-note">from Employee</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">department</span><span class="f-note">from Employee</span></div>
+        <div class="field-row"><span class="f-type">SchoolType</span><span class="f-name">school</span><span class="f-note">from Employee</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Operations via AdminService</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addUser</span> / <span class="m-name">removeUser</span></div><div class="m-note">Add or remove any user</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">updateUserName</span> / <span class="m-name">updateUserPassword</span></div><div class="m-note">Modify user credentials</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">User</span> <span class="m-name">findUserById</span> / <span class="m-name">findUserByUsername</span></div><div class="m-note">Search users</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printLogs</span>()</div><div class="m-note">View all logs with timestamps</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCHEREMPLOYEE -->
+  <div class="class-card" id="researcheremployee">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-new">★ NEW class</div><div class="cc-name">ResearcherEmployee</div><div class="cc-extends">extends <em>Employee</em> implements <em>Researcher</em></div><div class="cc-desc">Employee who is a researcher but neither Teacher nor Student. Can supervise 4th-year students if h-index ≥ 3.</div></div>
+      <div class="cc-pkg">users.ResearcherEmployee</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">hIndex</span></div>
+        <div class="field-row"><span class="f-type">List&lt;ResearchPaper&gt;</span><span class="f-name">researchPapers</span></div>
+        <div class="field-row"><span class="f-type">List&lt;ResearchProject&gt;</span><span class="f-name">researchProjects</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods (from Researcher)</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addResearchPaper</span>(<span class="m-param">ResearchPaper p</span>)</div><div class="m-note">Adds paper to list</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printPapers</span>(<span class="m-param">Comparator c</span>)</div><div class="m-note">Strategy pattern sorting</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getResearcherName</span>()</div><div class="m-note">Returns getFullName()</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 35 Q480 5 960 30 Q1200 45 1440 15 L1440 40 L0 40 Z" fill="#1C0A02"/></svg>
+
+<!-- ═══ COURSES PACKAGE ═══ -->
+<div class="section" id="course">
+  <div class="section-header">
+    <div class="section-eyebrow">04 — courses package</div>
+    <div class="section-title">Academic System</div>
+    <div class="section-subtitle">Course management, grading, lessons and transcripts</div>
+  </div>
+
+  <!-- COURSE -->
+  <div class="class-card">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Course</div><div class="cc-extends">implements <em>Serializable</em></div><div class="cc-desc">Central academic entity. Credit limit (21) and fail limit (3) enforced. Major/year filtering. Bidirectional links to Student and Teacher.</div></div>
+      <div class="cc-pkg">courses.Course</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">name</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">credits</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">targetMajor</span><span class="f-note">"Any" = no filter</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">targetYear</span><span class="f-note">0 = any year</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Student&gt;</span><span class="f-name">students</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Teacher&gt;</span><span class="f-name">instructors</span></div>
+        <div class="field-row"><span class="f-type">Map&lt;Student,Mark&gt;</span><span class="f-name">studentMarks</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Rules in registerStudent()</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">① canTakeMoreCourses()</div><div class="m-note">failedCoursesCount &lt; 3</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">② canRegister(credits)</div><div class="m-note">registeredCredits + credits ≤ 21</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">③ major check</div><div class="m-note">student.getMajor() == targetMajor</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">④ year check</div><div class="m-note">student.getYearOfStudy() == targetYear</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--l3)">⑤ on success</div><div class="m-note">student.addCredits() + student.addCourse(this)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARK -->
+  <div class="class-card" id="mark">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Mark</div><div class="cc-extends">implements <em>Serializable</em></div><div class="cc-desc">att1 + att2 + finalExam. isPassed() ≥ 50. Letter grades A through F.</div></div>
+      <div class="cc-pkg">courses.Mark</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">att1</span><span class="f-note">1st attestation</span></div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">att2</span><span class="f-note">2nd attestation</span></div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">finalExam</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods + Grades</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">double</span> <span class="m-name">getTotal</span>()</div><div class="m-note">att1 + att2 + finalExam</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">boolean</span> <span class="m-name">isPassed</span>()</div><div class="m-note">getTotal() ≥ 50</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getLetterGrade</span>()</div><div class="m-note">A(95+) A-(90) B+(85) B(80) B-(75) C+(70) C(65) C-(60) D+(55) D(50) F(&lt;50)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON -->
+  <div class="class-card" id="lesson">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Lesson</div><div class="cc-extends">implements <em>Serializable</em></div><div class="cc-desc">Single class session within a Course. Type is LECTURE or PRACTICE.</div></div>
+      <div class="cc-pkg">courses.Lesson</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">LessonType</span><span class="f-name">type</span><span class="f-note">LECTURE / PRACTICE</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">topic</span><span class="f-note">Lesson description</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">lessonNumber</span><span class="f-note">Order in course</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">LessonType</span> <span class="m-name">getType</span>()</div><div class="m-note">Returns LECTURE or PRACTICE</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getTopic</span>()</div><div class="m-note">Returns lesson topic</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">toString</span>()</div><div class="m-note">type + number + topic</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSCRIPT -->
+  <div class="class-card" id="transcript">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Transcript</div><div class="cc-extends">implements <em>Serializable</em></div><div class="cc-desc">Academic record — Course→Mark pairs. GPA = (totalPoints / totalCourses) / 25.0</div></div>
+      <div class="cc-pkg">courses.Transcript</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">Map&lt;Course,Mark&gt;</span><span class="f-name">courseMarks</span><span class="f-note">Course → grade</span></div>
+        <div class="field-row"><span class="f-type">double</span><span class="f-name">gpa</span><span class="f-note">Computed automatically</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">totalCourses</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addCourseMark</span>(<span class="m-param">Course c, Mark m</span>)</div><div class="m-note">Adds course-grade pair</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">double</span> <span class="m-name">getGpa</span>()</div><div class="m-note">(totalPoints / totalCourses) / 25.0</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printTranscript</span>()</div><div class="m-note">Prints all marks and final GPA</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q360 60 720 30 Q1080 0 1440 20 L1440 40 L0 40 Z" fill="#2E1206"/></svg>
+
+<!-- ═══ RESEARCH PACKAGE ═══ -->
+<div class="section" id="researcher">
+  <div class="section-header">
+    <div class="section-eyebrow">05 — research package</div>
+    <div class="section-title">Research System</div>
+    <div class="section-subtitle">Researcher interface, papers, projects, and utilities</div>
+  </div>
+
+  <!-- RESEARCHER -->
+  <div class="class-card">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-interface">interface</div><div class="cc-name">Researcher</div><div class="cc-desc">Research contract. printPapers(Comparator) is the Strategy pattern hook. Implemented by Student, Teacher, ResearcherEmployee.</div></div>
+      <div class="cc-pkg">research.Researcher</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Contract Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">int</span> <span class="m-name">getHIndex</span>() / <span class="m-name">setHIndex</span>(<span class="m-param">int</span>)</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">List&lt;ResearchPaper&gt;</span> <span class="m-name">getResearchPapers</span>()</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addResearchPaper</span>(<span class="m-param">ResearchPaper p</span>)</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printPapers</span>(<span class="m-param">Comparator&lt;ResearchPaper&gt; c</span>)</div><div class="m-note">★ Strategy pattern</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getResearcherName</span>()</div></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Implementations</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Student</div><div class="m-note">Bachelor researchers</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">Teacher</div><div class="m-note">PROFESSOR always; others opt-in</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--gold)">ResearcherEmployee ★</div><div class="m-note">Pure researcher role</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCHPAPER -->
+  <div class="class-card" id="researchpaper">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">ResearchPaper</div><div class="cc-extends">implements <em>Serializable</em></div><div class="cc-desc">Academic publication. Fields modeled after IEEE Xplore metadata. Used for sorting via Strategy pattern comparators.</div></div>
+      <div class="cc-pkg">research.ResearchPaper</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">title</span></div>
+        <div class="field-row"><span class="f-type">List&lt;String&gt;</span><span class="f-name">authors</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">citations</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">journal</span></div>
+        <div class="field-row"><span class="f-type">int</span><span class="f-name">pages</span></div>
+        <div class="field-row"><span class="f-type">LocalDate</span><span class="f-name">publicationDate</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">doi</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Sorting Comparators</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">PaperByCitationsComparator</div><div class="m-note">Descending — most cited first</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">PaperByDateComparator</div><div class="m-note">Descending — newest first</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">PaperByPagesComparator</div><div class="m-note">Descending — longest first</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCHPROJECT -->
+  <div class="class-card" id="researchproject">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">ResearchProject</div><div class="cc-extends">implements <em>Serializable</em></div><div class="cc-desc">Research project with a topic and list of participants. Only objects implementing Researcher can join — throws NonResearcherJoinException otherwise.</div></div>
+      <div class="cc-pkg">research.ResearchProject</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">topic</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Researcher&gt;</span><span class="f-name">participants</span></div>
+        <div class="field-row"><span class="f-type">List&lt;ResearchPaper&gt;</span><span class="f-name">papers</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">joinProject</span>(<span class="m-param">Object person</span>)</div><div class="m-note">Checks instanceof Researcher; throws NonResearcherJoinException if not</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">List&lt;Researcher&gt;</span> <span class="m-name">getParticipants</span>()</div><div class="m-note">Returns all project members</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getTopic</span>()</div><div class="m-note">Returns project topic</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCHUTILS -->
+  <div class="class-card" id="researchutils">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">utility class</div><div class="cc-name">ResearchUtils</div><div class="cc-desc">Static utility for cross-researcher operations. Finds top-cited researchers and prints all papers with chosen comparator.</div></div>
+      <div class="cc-pkg">research.ResearchUtils</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Static Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printAllPapers</span>(<span class="m-param">List&lt;Researcher&gt;, Comparator</span>)</div><div class="m-note">Collects all papers, sorts, prints</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">Researcher</span> <span class="m-name">getTopCitedResearcher</span>(<span class="m-param">List</span>)</div><div class="m-note">Max total citations</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">Researcher</span> <span class="m-name">getTopCitedResearcherBySchool</span>(<span class="m-param">..., SchoolType</span>)</div><div class="m-note">Filtered by school</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">Researcher</span> <span class="m-name">getTopCitedResearcherByYear</span>(<span class="m-param">..., int year</span>)</div><div class="m-note">Papers in given year only</div></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Validation</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">assignSupervisor</span>(<span class="m-param">Researcher r</span>)</div><div class="m-note">Validates h-index ≥ 3; throws InvalidSupervisorException</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 5 Q480 45 960 15 Q1200 -5 1440 30 L1440 40 L0 40 Z" fill="#1C0A02"/></svg>
+
+<!-- ═══ MANAGEMENT PACKAGE ═══ -->
+<div class="section" id="adminservice">
+  <div class="section-header">
+    <div class="section-eyebrow">06 — management package</div>
+    <div class="section-title">Management System</div>
+    <div class="section-subtitle">Admin/Manager services, Observer pattern, requests and messaging</div>
+  </div>
+
+  <!-- ADMINSERVICE -->
+  <div class="class-card">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">service class</div><div class="cc-name">AdminService</div><div class="cc-desc">All administrative operations. Manages user list, maintains action logs, provides sorted views.</div></div>
+      <div class="cc-pkg">management.AdminService</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">List&lt;User&gt;</span><span class="f-name">users</span></div>
+        <div class="field-row"><span class="f-type">List&lt;LogRecord&gt;</span><span class="f-name">logs</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addUser</span> / <span class="m-name">removeUser</span>(<span class="m-param">User u</span>)</div><div class="m-note">Adds/removes + logs</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">updateUserName</span>(<span class="m-param">User, first, last</span>)</div><div class="m-note">Updates name, logs old→new</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">updateUserPassword</span>(<span class="m-param">User, pwd</span>)</div><div class="m-note">Updates password, logs</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">User</span> <span class="m-name">findUserById</span> / <span class="m-name">findUserByUsername</span></div><div class="m-note">Linear search</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printStudentsByGpa</span>()</div><div class="m-note">Sorted via StudentGpaComparator</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">printUsersSortedByName</span>()</div><div class="m-note">Sorted via UserNameComparator</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGERSERVICE -->
+  <div class="class-card" id="managerservice">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">service class</div><div class="cc-name">ManagerService</div><div class="cc-desc">All manager operations: requests, news (Observer), messages, course assignments. Takes a Manager instance in constructor.</div></div>
+      <div class="cc-pkg">management.ManagerService</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">Manager</span><span class="f-name">manager</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Request&gt;</span><span class="f-name">requests</span></div>
+        <div class="field-row"><span class="f-type">List&lt;News&gt;</span><span class="f-name">newsList</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Message&gt;</span><span class="f-name">messages</span></div>
+        <div class="field-row"><span class="f-type">List&lt;LogRecord&gt;</span><span class="f-name">logs</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">approveRequest</span> / <span class="m-name">rejectRequest</span>(<span class="m-param">Request</span>)</div><div class="m-note">Sets flag, logs action</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">publishNews</span>(<span class="m-param">News</span>)</div><div class="m-note">Calls notifyObservers() — Observer pattern</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">assignTeacherToCourse</span>(<span class="m-param">Teacher, Course</span>)</div><div class="m-note">Calls addInstructor()</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">approveStudentRegistration</span>(<span class="m-param">Student, Course</span>)</div><div class="m-note">Calls registerStudent()</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">sendMessage</span>(<span class="m-param">Message</span>)</div><div class="m-note">Any User can be sender</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS -->
+  <div class="class-card" id="news">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class — Observer Subject</div><div class="cc-name">News</div><div class="cc-desc">The Subject in the Observer pattern. Holds List&lt;Observer&gt;. notifyObservers() calls update() on every subscriber.</div></div>
+      <div class="cc-pkg">management.News</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">title</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">content</span></div>
+        <div class="field-row"><span class="f-type">LocalDateTime</span><span class="f-name">publishedAt</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Observer&gt;</span><span class="f-name">observers</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Observer Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">attach</span>(<span class="m-param">Observer o</span>)</div><div class="m-note">Add subscriber</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">detach</span>(<span class="m-param">Observer o</span>)</div><div class="m-note">Remove subscriber</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">notifyObservers</span>()</div><div class="m-note">Calls update(this) on all observers</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBSERVER -->
+  <div class="class-card" id="observer">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-interface">interface</div><div class="cc-name">Observer</div><div class="cc-desc">Observer pattern contract. Implemented by NewsSubscriber. Called by News.notifyObservers() when news is published.</div></div>
+      <div class="cc-pkg">management.Observer</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Contract</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">update</span>(<span class="m-param">News news</span>)</div><div class="m-note">Called when Subject notifies</div></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Implementation</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">NewsSubscriber</div><div class="m-note">Prints: "[name] received: [title]"</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--muted)">new NewsSubscriber("Student Portal")</div><div class="m-note">Created with a name label</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REQUEST -->
+  <div class="class-card" id="request">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Request</div><div class="cc-desc">Request submitted by any User (Student or Employee). Three states: PENDING → APPROVED or REJECTED.</div></div>
+      <div class="cc-pkg">management.Request</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">User</span><span class="f-name">sender</span><span class="f-note">Any User — Student or Employee</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">content</span></div>
+        <div class="field-row"><span class="f-type">boolean</span><span class="f-name">approved / rejected</span></div>
+        <div class="field-row"><span class="f-type">LocalDateTime</span><span class="f-name">createdAt</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">approve</span>()</div><div class="m-note">Sets approved=true</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">reject</span>()</div><div class="m-note">Sets rejected=true</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getStatus</span>()</div><div class="m-note">Returns PENDING / APPROVED / REJECTED</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MESSAGE -->
+  <div class="class-card" id="message">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class</div><div class="cc-name">Message</div><div class="cc-desc">Direct message between any two Users. Sender and receiver are both User — students and employees can message each other.</div></div>
+      <div class="cc-pkg">management.Message</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">User</span><span class="f-name">sender</span><span class="f-note">Any User</span></div>
+        <div class="field-row"><span class="f-type">User</span><span class="f-name">receiver</span><span class="f-note">Any User</span></div>
+        <div class="field-row"><span class="f-type">String</span><span class="f-name">text</span></div>
+        <div class="field-row"><span class="f-type">LocalDateTime</span><span class="f-name">sentAt</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">User</span> <span class="m-name">getSender</span>()</div><div class="m-note">Returns sender</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">User</span> <span class="m-name">getReceiver</span>()</div><div class="m-note">Returns receiver</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">getText</span>()</div><div class="m-note">Returns message text</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">String</span> <span class="m-name">toString</span>()</div><div class="m-note">sender → receiver: text (sentAt)</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 30 Q360 5 720 28 Q1080 50 1440 20 L1440 40 L0 40 Z" fill="#2E1206"/></svg>
+
+<!-- ═══ SYSTEM LAYER ═══ -->
+<div class="section" id="datastore">
+  <div class="section-header">
+    <div class="section-eyebrow">07 — System Layer</div>
+    <div class="section-title">System Infrastructure</div>
+    <div class="section-subtitle">DataStore, AuthService, UserFactory, Comparators</div>
+  </div>
+
+  <!-- DATASTORE -->
+  <div class="class-card">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class — Singleton</div><div class="cc-name">DataStore</div><div class="cc-extends">implements <em>Serializable</em></div><div class="cc-desc">Central data storage. Private constructor + getInstance(). save() writes to data.ser. load() restores singleton from disk.</div></div>
+      <div class="cc-pkg">database.DataStore</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Fields</div>
+        <div class="field-row"><span class="f-type">static DataStore</span><span class="f-name">instance</span><span class="f-note">Singleton</span></div>
+        <div class="field-row"><span class="f-type">List&lt;User&gt;</span><span class="f-name">users</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Course&gt;</span><span class="f-name">courses</span></div>
+        <div class="field-row"><span class="f-type">List&lt;News&gt;</span><span class="f-name">news</span></div>
+        <div class="field-row"><span class="f-type">List&lt;Request&gt;</span><span class="f-name">requests</span></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Key Methods</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">static DataStore</span> <span class="m-name">getInstance</span>()</div><div class="m-note">Creates if null — Singleton pattern</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">save</span>(<span class="m-param">String filename</span>)</div><div class="m-note">ObjectOutputStream → file</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">static DataStore</span> <span class="m-name">load</span>(<span class="m-param">String filename</span>)</div><div class="m-note">ObjectInputStream → restores singleton</div></div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">void</span> <span class="m-name">addUser</span>(<span class="m-param">User u</span>)</div><div class="m-note">Adds user to storage</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTHSERVICE -->
+  <div class="class-card" id="authservice">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">service class</div><div class="cc-name">AuthService</div><div class="cc-desc">Stateless authentication service. Iterates user list and returns matching User if username AND password match.</div></div>
+      <div class="cc-pkg">auth.AuthService</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Method</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">User</span> <span class="m-name">login</span>(<span class="m-param">String username, String password, List&lt;User&gt; users</span>)</div><div class="m-note">Returns matching User or null if not found</div></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Usage</div>
+        <div style="padding:8px 0">
+          <div class="code-block">
+            <div class="code-top"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><div class="code-lang">Java</div></div>
+            <pre><span class="cl">DataStore</span> ds = <span class="cl">DataStore</span>.<span class="fn">load</span>(<span class="st">"data.ser"</span>);
+<span class="cl">User</span> u = <span class="kw">new</span> <span class="cl">AuthService</span>().<span class="fn">login</span>(
+    <span class="st">"nurzhan"</span>, <span class="st">"123"</span>, ds.<span class="fn">getUsers</span>());
+<span class="cm">// → Login success: Nurzhan Kalmurat-Updated</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USERFACTORY -->
+  <div class="class-card" id="userfactory">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">class — Factory</div><div class="cc-name">UserFactory</div><div class="cc-desc">Static factory. createUser(type,...) returns correct subclass. Throws IllegalArgumentException for unknown types.</div></div>
+      <div class="cc-pkg">factory.UserFactory</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Factory Method</div>
+        <div class="method-row"><div class="m-sig"><span class="m-ret">static User</span> <span class="m-name">createUser</span>(<span class="m-param">String type, String id, String username, String password, String firstName, String lastName, Gender gender</span>)</div></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">Supported Types</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">"student"</div><div class="m-note">→ Student, major="CS", year=1</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">"teacher"</div><div class="m-note">→ Teacher, title=LECTURER</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">"manager"</div><div class="m-note">→ Manager, type=OR</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">"admin"</div><div class="m-note">→ Admin</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARATORS -->
+  <div class="class-card" id="comparators">
+    <div class="cc-head">
+      <div><div class="cc-type-badge badge-class">Strategy Pattern</div><div class="cc-name">Comparators</div><div class="cc-desc">Five interchangeable sorting strategies. All implement Comparator&lt;T&gt;. Used via printPapers(Comparator c) — Strategy pattern.</div></div>
+      <div class="cc-pkg">comparators / research.comparators</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-section">
+        <div class="cc-section-title">Research Comparators</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">PaperByCitationsComparator</div><div class="m-note">ResearchPaper — descending citations</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">PaperByDateComparator</div><div class="m-note">ResearchPaper — descending date (newest first)</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">PaperByPagesComparator</div><div class="m-note">ResearchPaper — descending pages</div></div>
+      </div>
+      <div class="cc-section">
+        <div class="cc-section-title">User Comparators</div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">StudentGpaComparator</div><div class="m-note">Student — descending GPA (highest first)</div></div>
+        <div class="method-row"><div class="m-sig" style="color:var(--accent)">UserNameComparator</div><div class="m-note">User — ascending name (A → Z)</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q480 55 960 20 Q1200 5 1440 30 L1440 40 L0 40 Z" fill="#2E1206"/></svg>
+
+<!-- ═══ EXCEPTIONS ═══ -->
+<div class="section" id="exceptions">
+  <div class="section-header">
+    <div class="section-eyebrow">08 — Error Handling</div>
+    <div class="section-title">Custom Exceptions</div>
+    <div class="section-subtitle">Domain-specific checked exceptions for business rule violations</div>
+  </div>
+  <div class="exc-grid">
+    <div class="exc-card">
+      <div class="exc-name">InvalidSupervisorException</div>
+      <div class="exc-ext">extends Exception</div>
+      <div class="exc-desc">Thrown when a research supervisor's h-index is less than 3. Only 4th-year students require a supervisor.</div>
+      <div class="exc-when">⚡ Student.assignResearchSupervisor() · ResearchUtils.assignSupervisor()</div>
+    </div>
+    <div class="exc-card">
+      <div class="exc-name">NonResearcherJoinException</div>
+      <div class="exc-ext">extends Exception</div>
+      <div class="exc-desc">Thrown when an object that doesn't implement Researcher tries to join a ResearchProject. instanceof check at runtime.</div>
+      <div class="exc-when">⚡ ResearchProject.joinProject(Object person)</div>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-divider" viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 30 Q360 5 720 28 Q1080 50 1440 20 L1440 40 L0 40 Z" fill="#1C0A02"/></svg>
+
+<!-- ═══ ENUMERATIONS ═══ -->
+<div class="section" id="enums">
+  <div class="section-header">
+    <div class="section-eyebrow">09 — Type System</div>
+    <div class="section-title">Enumerations</div>
+    <div class="section-subtitle">Type-safe domain constants</div>
+  </div>
+  <div class="enums-grid">
+    <div class="enum-card">
+      <div class="enum-name">TeacherTitle</div>
+      <div class="enum-pkg">enums.TeacherTitle</div>
+      <div class="enum-val">TUTOR</div>
+      <div class="enum-val">LECTURER</div>
+      <div class="enum-val">SENIOR_LECTURER</div>
+      <div class="enum-val" style="color:var(--accent)">PROFESSOR ← always Researcher</div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">SchoolType</div>
+      <div class="enum-pkg">enums.SchoolType</div>
+      <div class="enum-val">FIT</div><div class="enum-val">BS</div><div class="enum-val">ISE</div><div class="enum-val">SAM</div><div class="enum-val">KMA</div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">ManagerType</div>
+      <div class="enum-pkg">enums.ManagerType</div>
+      <div class="enum-val">OR</div><div class="enum-val">DEPARTMENT</div><div class="enum-val">FACULTY</div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">LessonType</div>
+      <div class="enum-pkg">enums.LessonType</div>
+      <div class="enum-val">LECTURE</div><div class="enum-val">PRACTICE</div>
+    </div>
+    <div class="enum-card">
+      <div class="enum-name">Gender</div>
+      <div class="enum-pkg">enums.Gender</div>
+      <div class="enum-val">MALE</div><div class="enum-val">FEMALE</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<svg class="wave-divider" viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg"><path d="M0 25 Q360 0 720 30 Q1080 60 1440 20 L1440 50 L0 50 Z" fill="#2E1206"/></svg>
+<div class="footer">
+  <div>
+    <div class="footer-text" style="color:var(--muted);font-size:13px;font-family:'Playfair Display',serif;font-weight:600">University Management System</div>
+    <div class="footer-text" style="margin-top:4px">OOP Group G1 · Java SE 21 · 2026 · github.com/kkkhanbin/G1_OOP_Project</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span class="chip" style="color:var(--accent)">◈ Singleton</span>
+    <span class="chip" style="color:var(--l3)">◇ Factory</span>
+    <span class="chip" style="color:#7DC47A">◉ Observer</span>
+    <span class="chip" style="color:#7AB8C4">◫ Strategy</span>
+  </div>
+</div>
+
+</main>
+
+<script>
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('[id]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => {
+        n.classList.remove('active');
+        if (n.getAttribute('href') === '#' + e.target.id) n.classList.add('active');
+      });
+    }
+  });
+}, {threshold: 0.15, rootMargin: '-80px 0px -55% 0px'});
+sections.forEach(s => obs.observe(s));
+function filterNav(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.style.display = !q || item.textContent.toLowerCase().includes(q) ? 'flex' : 'none';
+  });
+}
+</script>
+</body>
+</html>
